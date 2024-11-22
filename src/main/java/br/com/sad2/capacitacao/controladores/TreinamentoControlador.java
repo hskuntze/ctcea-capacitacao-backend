@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -74,5 +75,22 @@ public class TreinamentoControlador {
 	    Long idTreinamento = Long.valueOf(requestBody.get("idTreinamento").toString());
 		
 	    return ResponseEntity.ok().body(treinamentoServico.inserirUsuarioEmTreinamento(idTreinamento, idUsuario));
+	}
+	
+	@PutMapping(value = "/remover/user")
+	public ResponseEntity<TreinamentoDTO> removerUsuarioEmTreinamento(@RequestBody Map<String, Object> requestBody) {
+	    Long idUsuario = Long.valueOf(requestBody.get("idUsuario").toString());
+	    Long idTreinamento = Long.valueOf(requestBody.get("idTreinamento").toString());
+		
+	    return ResponseEntity.ok().body(treinamentoServico.removerUsuarioEmTreinamento(idTreinamento, idUsuario));
+	}
+	
+	/**
+	 * --------- DELETE ---------
+	 */
+	@DeleteMapping(value = "/deletar/{id}")
+	public ResponseEntity<Void> deletar(@PathVariable Long id) {
+		treinamentoServico.deletar(id);
+		return ResponseEntity.noContent().build();
 	}
 }
