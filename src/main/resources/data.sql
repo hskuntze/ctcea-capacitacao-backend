@@ -14,7 +14,7 @@ INSERT INTO tb_treinamento (
   material_didatico, observacoes, pre_requisitos
 )
 VALUES (
-  'SAD2', 'Material A', 'Treinamento de Primeiros Socorros', 3, 'Sistema de Saúde', 1, 
+  'sad2', 'Material A', 'Treinamento de Primeiros Socorros', 3, 'Sistema de Saúde', 1, 
   'Brigada 1', 'OM001', 1, 2, 'Instituição A', '2024-01-10', 
   '2024-01-15', 50, 2, 1, 1, 
   'Instrutor A', 'contato@instrutora.com', 1, 'Logística do treinamento XYZ', 
