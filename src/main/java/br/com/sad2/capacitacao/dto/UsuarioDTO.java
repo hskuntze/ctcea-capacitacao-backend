@@ -22,8 +22,6 @@ public class UsuarioDTO implements Serializable {
 	
 	private Set<PerfilDTO> perfis = new HashSet<>();
 	
-	private Set<TreinamentoDTO> treinamentos = new HashSet<>();
-	
 	public UsuarioDTO() {
 	}
 	
@@ -37,9 +35,6 @@ public class UsuarioDTO implements Serializable {
 		
 		this.perfis.clear();
 		usuario.getPerfis().forEach(perfil -> this.perfis.add(new PerfilDTO(perfil)));
-		
-		this.treinamentos.clear();
-		usuario.getTreinamentos().forEach(t -> this.treinamentos.add(new TreinamentoDTO(t)));
 	}
 
 	public Long getId() {
@@ -92,10 +87,6 @@ public class UsuarioDTO implements Serializable {
 
 	public Set<PerfilDTO> getPerfis() {
 		return perfis;
-	}
-
-	public Set<TreinamentoDTO> getTreinamentos() {
-		return treinamentos;
 	}
 
 	@Override

@@ -2,7 +2,6 @@ package br.com.sad2.capacitacao.controladores;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,19 +33,9 @@ public class TreinamentoControlador {
 		return ResponseEntity.ok().body(treinamentoServico.buscarTodos());
 	}
 	
-	@GetMapping(value = "/users")
-	public ResponseEntity<List<TreinamentoDTO>> buscarTodosComUsuario() {
-		return ResponseEntity.ok().body(treinamentoServico.buscarTodosComUsuario());
-	}
-	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<TreinamentoDTO> buscarPorId(@PathVariable Long id) {
 		return ResponseEntity.ok().body(treinamentoServico.buscarPorId(id));
-	}
-
-	@GetMapping(value = "/{id}/users")
-	public ResponseEntity<TreinamentoDTO> buscarPorIdComUsuarios(@PathVariable Long id) {
-		return ResponseEntity.ok().body(treinamentoServico.buscarPorIdComUsuarios(id));
 	}
 	
 	/**
@@ -55,7 +44,7 @@ public class TreinamentoControlador {
 	@PostMapping(value = "/registrar")
 	public ResponseEntity<TreinamentoDTO> registrar(@RequestBody TreinamentoDTO dto) {
 		TreinamentoDTO treinamento = treinamentoServico.registrar(dto);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri();
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(treinamento.getId()).toUri();
 		
 		return ResponseEntity.created(uri).body(treinamento);
 	}
@@ -67,22 +56,6 @@ public class TreinamentoControlador {
 	public ResponseEntity<TreinamentoDTO> atualizar(@PathVariable Long id, @RequestBody TreinamentoDTO dto) {
 		TreinamentoDTO treinamento = treinamentoServico.atualizar(id, dto);
 		return ResponseEntity.ok().body(treinamento);
-	}
-	
-	@PutMapping(value = "/inserir/user")
-	public ResponseEntity<TreinamentoDTO> inserirUsuarioEmTreinamento(@RequestBody Map<String, Object> requestBody) {
-	    Long idUsuario = Long.valueOf(requestBody.get("idUsuario").toString());
-	    Long idTreinamento = Long.valueOf(requestBody.get("idTreinamento").toString());
-		
-	    return ResponseEntity.ok().body(treinamentoServico.inserirUsuarioEmTreinamento(idTreinamento, idUsuario));
-	}
-	
-	@PutMapping(value = "/remover/user")
-	public ResponseEntity<TreinamentoDTO> removerUsuarioEmTreinamento(@RequestBody Map<String, Object> requestBody) {
-	    Long idUsuario = Long.valueOf(requestBody.get("idUsuario").toString());
-	    Long idTreinamento = Long.valueOf(requestBody.get("idTreinamento").toString());
-		
-	    return ResponseEntity.ok().body(treinamentoServico.removerUsuarioEmTreinamento(idTreinamento, idUsuario));
 	}
 	
 	/**

@@ -2,8 +2,6 @@ package br.com.sad2.capacitacao.dto;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 import br.com.sad2.capacitacao.entities.Treinamento;
 
@@ -34,13 +32,11 @@ public class TreinamentoDTO implements Serializable {
 	private String logisticaTreinamento;
 	private Boolean nivelamento;
 	private Integer cargaHoraria;
-	private Boolean publicoAlvo;
+	private Integer publicoAlvo;
 	private String descricaoAtividade;
 	private String materialDidatico;
 	private String observacoes;
 	private String preRequisitos;
-	
-	private Set<UsuarioBasicoDTO> usuarios = new HashSet<>();
 	
 	public TreinamentoDTO() {
 	}
@@ -269,11 +265,11 @@ public class TreinamentoDTO implements Serializable {
 		this.cargaHoraria = cargaHoraria;
 	}
 
-	public Boolean getPublicoAlvo() {
+	public Integer getPublicoAlvo() {
 		return publicoAlvo;
 	}
 
-	public void setPublicoAlvo(Boolean publicoAlvo) {
+	public void setPublicoAlvo(Integer publicoAlvo) {
 		this.publicoAlvo = publicoAlvo;
 	}
 
@@ -307,9 +303,5 @@ public class TreinamentoDTO implements Serializable {
 
 	public void setPreRequisitos(String preRequisitos) {
 		this.preRequisitos = preRequisitos;
-	}
-
-	public Set<UsuarioBasicoDTO> getUsuarios() {
-		return usuarios;
 	}
 }

@@ -43,12 +43,6 @@ public class Usuario implements Serializable, UserDetails {
 				inverseJoinColumns = @JoinColumn(name = "id_perfil"))
 	private Set<Perfil> perfis = new HashSet<>();
 	
-	@ManyToMany
-    @JoinTable(name = "tb_treinamento_usuario",
-            joinColumns = @JoinColumn(name = "id_usuario"),
-            inverseJoinColumns = @JoinColumn(name = "id_treinamento"))
-    private Set<Treinamento> treinamentos = new HashSet<>();
-	
 	public Usuario() {
 	}
 	
@@ -107,10 +101,6 @@ public class Usuario implements Serializable, UserDetails {
 
 	public Set<Perfil> getPerfis() {
 		return perfis;
-	}
-	
-	public Set<Treinamento> getTreinamentos() {
-		return treinamentos;
 	}
 
 	@Override

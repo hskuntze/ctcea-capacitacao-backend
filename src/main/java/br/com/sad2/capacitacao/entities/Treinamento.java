@@ -49,7 +49,7 @@ public class Treinamento {
     private String logisticaTreinamento;
     private Boolean nivelamento;
     private Integer cargaHoraria;
-    private Boolean publicoAlvo;
+    private Integer publicoAlvo;
     
     @Lob
     private String descricaoAtividade;
@@ -258,11 +258,11 @@ public class Treinamento {
 		this.cargaHoraria = cargaHoraria;
 	}
 
-	public Boolean getPublicoAlvo() {
+	public Integer getPublicoAlvo() {
 		return publicoAlvo;
 	}
 
-	public void setPublicoAlvo(Boolean publicoAlvo) {
+	public void setPublicoAlvo(Integer publicoAlvo) {
 		this.publicoAlvo = publicoAlvo;
 	}
 
