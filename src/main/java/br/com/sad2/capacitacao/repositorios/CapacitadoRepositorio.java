@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import br.com.sad2.capacitacao.entities.Capacitado;
 
 @Repository
-public interface CapacitadoRepository extends JpaRepository<Capacitado, Long>{
+public interface CapacitadoRepositorio extends JpaRepository<Capacitado, Long>{
 	
 	Optional<Capacitado> findByEmail(String email);
 }

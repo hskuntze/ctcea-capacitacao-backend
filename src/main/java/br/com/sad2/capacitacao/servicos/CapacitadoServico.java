@@ -14,7 +14,7 @@ import br.com.sad2.capacitacao.dto.CapacitadoDTO;
 import br.com.sad2.capacitacao.dto.CapacitadoRegistroDTO;
 import br.com.sad2.capacitacao.entities.Capacitado;
 import br.com.sad2.capacitacao.entities.Treinamento;
-import br.com.sad2.capacitacao.repositorios.CapacitadoRepository;
+import br.com.sad2.capacitacao.repositorios.CapacitadoRepositorio;
 import br.com.sad2.capacitacao.repositorios.TreinamentoRepositorio;
 import br.com.sad2.capacitacao.servicos.excecoes.RecursoNaoEncontradoException;
 import br.com.sad2.capacitacao.servicos.excecoes.RequisicaoNaoProcessavelException;
@@ -23,7 +23,7 @@ import br.com.sad2.capacitacao.servicos.excecoes.RequisicaoNaoProcessavelExcepti
 public class CapacitadoServico {
 
 	@Autowired
-	private CapacitadoRepository capacitadoRepository;
+	private CapacitadoRepositorio capacitadoRepository;
 	
 	@Autowired
 	private TreinamentoRepositorio treinamentoRepository;

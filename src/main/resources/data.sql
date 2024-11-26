@@ -9,17 +9,14 @@ INSERT INTO tb_treinamento (
   sad, material, treinamento, tipo, subsistema, modalidade, 
   brigada, om, grupo, executor, instituicao, data_inicio, 
   data_fim, vagas, status, avaliacao_pratica, avaliacao_teorica, 
-  nome_instrutores, contato_instrutores, certificado, logistica_treinamento, 
-  nivelamento, carga_horaria, publico_alvo, descricao_atividade, 
-  material_didatico, observacoes, pre_requisitos
+  certificado, logistica_treinamento, 
+  nivelamento, carga_horaria, publico_alvo, descricao_atividade, observacoes, pre_requisitos
 )
 VALUES (
   'sad2', 'Material A', 'Treinamento de Primeiros Socorros', 3, 'CSC', 1, 
   'Vinculação direta ao CMDO', 'DESMIL', 1, 2, 'Instituição A', '2024-01-10', 
   '2024-01-15', 50, 2, 1, 1, 
-  'Instrutor A', 'contato@instrutora.com', 1, 'Logística do treinamento XYZ', 
-  1, 40, 1, 'Treinamento sobre primeiros socorros com simulações práticas', 
-  'Material didático: slides e apostilas', '', 'Noções básicas de saúde'
+  1, 'Logística do treinamento XYZ', 1, 40, 1, 'Treinamento sobre primeiros socorros com simulações práticas', '', 'Noções básicas de saúde'
 );
 
 INSERT INTO tb_om (CODIGO, CODOM, SIGLA, RM, CMA, DE, CIDADEESTADO, CNPJ, Tipo, BDA, FORPRON, OMCOMMATERIAL, ENDERECO, CEP, NIVEL, ID, CODREGRA) VALUES (2, '039875', 'DECEx', '1ª RM', 'DECEx', 'Vinculação direta ao CMDO / ODS', 'Rio de Janeiro/RJ', '00.394.452/0270-52', 'ODS', 'Vinculação direta ao CMDO', '', 'Não', '', '', 1, 99, 102);

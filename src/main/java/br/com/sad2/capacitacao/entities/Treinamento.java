@@ -1,14 +1,21 @@
 package br.com.sad2.capacitacao.entities;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -43,25 +50,38 @@ public class Treinamento {
     private Integer status;
     private Boolean avaliacaoPratica;
     private Boolean avaliacaoTeorica;
-    private String nomeInstrutores;
-    private String contatoInstrutores;
     private Boolean certificado;
     private String logisticaTreinamento;
     private Boolean nivelamento;
     private Integer cargaHoraria;
     private Integer publicoAlvo;
     
-    @Lob
-    private String descricaoAtividade;
+    @OneToMany(mappedBy = "treinamento", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Instrutor> instrutores = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "treinamento", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MaterialDidaticoFile> materiaisDidaticos = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "treinamento", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<LogisticaTreinamentoFile> logisticaTreinamentos = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "treinamento", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Turma> turmas = new ArrayList<>();
     
     @Lob
-    private String materialDidatico;
+    private String descNivelamento;
+    
+    @Lob
+    private String descricaoAtividade;
     
     @Lob
     private String observacoes;
     
     @Lob
     private String preRequisitos;
+    
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     
     public Treinamento() {
 	}
@@ -210,22 +230,6 @@ public class Treinamento {
 		this.avaliacaoTeorica = avaliacaoTeorica;
 	}
 
-	public String getNomeInstrutores() {
-		return nomeInstrutores;
-	}
-
-	public void setNomeInstrutores(String nomeInstrutores) {
-		this.nomeInstrutores = nomeInstrutores;
-	}
-
-	public String getContatoInstrutores() {
-		return contatoInstrutores;
-	}
-
-	public void setContatoInstrutores(String contatoInstrutores) {
-		this.contatoInstrutores = contatoInstrutores;
-	}
-
 	public Boolean getCertificado() {
 		return certificado;
 	}
@@ -274,14 +278,6 @@ public class Treinamento {
 		this.descricaoAtividade = descricaoAtividade;
 	}
 
-	public String getMaterialDidatico() {
-		return materialDidatico;
-	}
-
-	public void setMaterialDidatico(String materialDidatico) {
-		this.materialDidatico = materialDidatico;
-	}
-
 	public String getObservacoes() {
 		return observacoes;
 	}
@@ -298,6 +294,56 @@ public class Treinamento {
 		this.preRequisitos = preRequisitos;
 	}
 
+	public String getDescNivelamento() {
+		return descNivelamento;
+	}
+
+	public void setDescNivelamento(String descNivelamento) {
+		this.descNivelamento = descNivelamento;
+	}
+	
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	public List<Instrutor> getInstrutores() {
+		return instrutores;
+	}
+
+	public List<MaterialDidaticoFile> getMateriaisDidaticos() {
+		return materiaisDidaticos;
+	}
+
+	public List<LogisticaTreinamentoFile> getLogisticaTreinamentos() {
+		return logisticaTreinamentos;
+	}
+
+	public List<Turma> getTurmas() {
+		return turmas;
+	}
+
+	@PrePersist
+	protected void onCreate() {
+		this.createdAt = LocalDateTime.now();
+	}
+	
+	@PreUpdate
+	protected void onUpdate() {
+		this.updatedAt = LocalDateTime.now();
+	}
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
