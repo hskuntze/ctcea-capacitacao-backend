@@ -1,10 +1,7 @@
 package br.com.sad2.capacitacao.dto;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 import br.com.sad2.capacitacao.entities.Capacitado;
 
@@ -12,63 +9,57 @@ public class CapacitadoDTO implements Serializable {
 	private static final long serialVersionUID = 5192613100520253082L;
 
 	private Long id;
-	private Integer modalidade;
-	private String brigada;
-	private String om;
-	private Integer grupo;
-	private String subsistema;
-	private String posto;
+	private Integer tipo;
 	private String nomeCompleto;
 	private String nomeGuerra;
 	private String email;
 	private String celular;
 	private String brigadaMilitar;
-	private String omMilitar;
+	private String instituicao;
 	private Boolean avaliacaoPratica;
 	private Boolean avaliacaoTeorica;
+	private Boolean exigeNotaPratica;
+	private Boolean exigeNotaTeorica;
 	private Float notaPratica;
 	private Float notaTeorica;
+	private String turma;
 	private Boolean certificado;
 	private String tipoCertificado;
 	private String numeroBi;
-	private String observacoes;
-	private Date dataInicio;
-	private Date dataFim;
+	private String observacoesAvaliacaoPratica;
+	private String observacoesAvaliacaoTeorica;
+	private String funcao;
 	
-	private Set<TreinamentoDTO> treinamentos = new HashSet<>();
-
+	private TreinamentoBasicoDTO treinamento;
+	private PostoDTO posto;
+	
 	public CapacitadoDTO() {
 	}
 	
 	public CapacitadoDTO(Capacitado capacitado) {
 	    this.id = capacitado.getId();
-	    this.modalidade = capacitado.getModalidade();
-	    this.brigada = capacitado.getBrigada();
-	    this.om = capacitado.getOm();
-	    this.grupo = capacitado.getGrupo();
-	    this.subsistema = capacitado.getSubsistema();
-	    this.posto = capacitado.getPosto();
+	    this.tipo = capacitado.getTipo();
+	    this.posto = new PostoDTO(capacitado.getPosto());
 	    this.nomeCompleto = capacitado.getNomeCompleto();
 	    this.nomeGuerra = capacitado.getNomeGuerra();
 	    this.email = capacitado.getEmail();
 	    this.celular = capacitado.getCelular();
 	    this.brigadaMilitar = capacitado.getBrigadaMilitar();
-	    this.omMilitar = capacitado.getOmMilitar();
+	    this.instituicao = capacitado.getInstituicao();
 	    this.avaliacaoPratica = capacitado.getAvaliacaoPratica();
 	    this.avaliacaoTeorica = capacitado.getAvaliacaoTeorica();
+	    this.exigeNotaPratica = capacitado.getExigeNotaPratica();
+	    this.exigeNotaTeorica = capacitado.getExigeNotaTeorica();
 	    this.notaPratica = capacitado.getNotaPratica();
 	    this.notaTeorica = capacitado.getNotaTeorica();
+	    this.turma = capacitado.getTurma();
 	    this.certificado = capacitado.getCertificado();
 	    this.tipoCertificado = capacitado.getTipoCertificado();
 	    this.numeroBi = capacitado.getNumeroBi();
-	    this.observacoes = capacitado.getObservacoes();
-	    this.dataInicio = capacitado.getDataInicio();
-	    this.dataFim = capacitado.getDataFim();
-	    
-	    treinamentos.clear();
-	    capacitado.getTreinamentos().forEach(t -> {
-	    	this.treinamentos.add(new TreinamentoDTO(t));
-	    });
+	    this.observacoesAvaliacaoPratica = capacitado.getObservacoesAvaliacaoPratica();
+	    this.observacoesAvaliacaoTeorica = capacitado.getObservacoesAvaliacaoTeorica();
+	    this.treinamento = new TreinamentoBasicoDTO(capacitado.getTreinamento());
+	    this.funcao = capacitado.getFuncao();
 	}
 
 	public Long getId() {
@@ -79,51 +70,19 @@ public class CapacitadoDTO implements Serializable {
 		this.id = id;
 	}
 
-	public Integer getModalidade() {
-		return modalidade;
+	public Integer getTipo() {
+		return tipo;
 	}
 
-	public void setModalidade(Integer modalidade) {
-		this.modalidade = modalidade;
+	public void setTipo(Integer tipo) {
+		this.tipo = tipo;
 	}
 
-	public String getBrigada() {
-		return brigada;
-	}
-
-	public void setBrigada(String brigada) {
-		this.brigada = brigada;
-	}
-
-	public String getOm() {
-		return om;
-	}
-
-	public void setOm(String om) {
-		this.om = om;
-	}
-
-	public Integer getGrupo() {
-		return grupo;
-	}
-
-	public void setGrupo(Integer grupo) {
-		this.grupo = grupo;
-	}
-
-	public String getSubsistema() {
-		return subsistema;
-	}
-
-	public void setSubsistema(String subsistema) {
-		this.subsistema = subsistema;
-	}
-
-	public String getPosto() {
+	public PostoDTO getPosto() {
 		return posto;
 	}
 
-	public void setPosto(String posto) {
+	public void setPosto(PostoDTO posto) {
 		this.posto = posto;
 	}
 
@@ -159,6 +118,14 @@ public class CapacitadoDTO implements Serializable {
 		this.celular = celular;
 	}
 
+	public String getTurma() {
+		return turma;
+	}
+
+	public void setTurma(String turma) {
+		this.turma = turma;
+	}
+
 	public String getBrigadaMilitar() {
 		return brigadaMilitar;
 	}
@@ -167,12 +134,12 @@ public class CapacitadoDTO implements Serializable {
 		this.brigadaMilitar = brigadaMilitar;
 	}
 
-	public String getOmMilitar() {
-		return omMilitar;
+	public String getInstituicao() {
+		return instituicao;
 	}
 
-	public void setOmMilitar(String omMilitar) {
-		this.omMilitar = omMilitar;
+	public void setInstituicao(String instituicao) {
+		this.instituicao = instituicao;
 	}
 
 	public Boolean getAvaliacaoPratica() {
@@ -189,6 +156,22 @@ public class CapacitadoDTO implements Serializable {
 
 	public void setAvaliacaoTeorica(Boolean avaliacaoTeorica) {
 		this.avaliacaoTeorica = avaliacaoTeorica;
+	}
+	
+	public Boolean getExigeNotaPratica() {
+		return exigeNotaPratica;
+	}
+
+	public void setExigeNotaPratica(Boolean exijeNotaPratica) {
+		this.exigeNotaPratica = exijeNotaPratica;
+	}
+
+	public Boolean getExigeNotaTeorica() {
+		return exigeNotaTeorica;
+	}
+
+	public void setExigeNotaTeorica(Boolean exijeNotaTeorica) {
+		this.exigeNotaTeorica = exijeNotaTeorica;
 	}
 
 	public Float getNotaPratica() {
@@ -230,33 +213,37 @@ public class CapacitadoDTO implements Serializable {
 	public void setNumeroBi(String numeroBi) {
 		this.numeroBi = numeroBi;
 	}
-
-	public String getObservacoes() {
-		return observacoes;
+	
+	public String getObservacoesAvaliacaoPratica() {
+		return observacoesAvaliacaoPratica;
 	}
 
-	public void setObservacoes(String observacoes) {
-		this.observacoes = observacoes;
+	public void setObservacoesAvaliacaoPratica(String observacoesAvaliacaoPratica) {
+		this.observacoesAvaliacaoPratica = observacoesAvaliacaoPratica;
 	}
 
-	public Date getDataInicio() {
-		return dataInicio;
+	public String getObservacoesAvaliacaoTeorica() {
+		return observacoesAvaliacaoTeorica;
 	}
 
-	public void setDataInicio(Date dataInicio) {
-		this.dataInicio = dataInicio;
+	public void setObservacoesAvaliacaoTeorica(String observacoesAvaliacaoTeorica) {
+		this.observacoesAvaliacaoTeorica = observacoesAvaliacaoTeorica;
 	}
 
-	public Date getDataFim() {
-		return dataFim;
+	public TreinamentoBasicoDTO getTreinamento() {
+		return treinamento;
 	}
 
-	public void setDataFim(Date dataFim) {
-		this.dataFim = dataFim;
+	public void setTreinamento(TreinamentoBasicoDTO treinamento) {
+		this.treinamento = treinamento;
 	}
 
-	public Set<TreinamentoDTO> getTreinamentos() {
-		return treinamentos;
+	public String getFuncao() {
+		return funcao;
+	}
+
+	public void setFuncao(String funcao) {
+		this.funcao = funcao;
 	}
 
 	@Override

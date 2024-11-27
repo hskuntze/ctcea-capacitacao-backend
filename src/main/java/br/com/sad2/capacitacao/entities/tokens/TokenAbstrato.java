@@ -25,10 +25,11 @@ public abstract class TokenAbstrato {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	private String token;
+	private Date dataExpiracao;
+
 	@OneToOne(targetEntity = Usuario.class, fetch = FetchType.EAGER)
 	@JoinColumn(nullable = false, name = "user_id")
 	private Usuario usuario;
-	private Date dataExpiracao;
 
 	public Long getId() {
 		return id;

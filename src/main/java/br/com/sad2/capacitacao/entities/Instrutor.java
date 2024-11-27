@@ -21,7 +21,7 @@ public class Instrutor {
 	private String contato;
 	
 	@ManyToOne
-	@JoinColumn(name = "treinamento_id")
+	@JoinColumn(name = "id_treinamento")
 	private Treinamento treinamento;
 	
 	public Instrutor() {

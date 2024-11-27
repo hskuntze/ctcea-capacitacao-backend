@@ -10,13 +10,13 @@ INSERT INTO tb_treinamento (
   brigada, om, grupo, executor, instituicao, data_inicio, 
   data_fim, vagas, status, avaliacao_pratica, avaliacao_teorica, 
   certificado, logistica_treinamento, 
-  nivelamento, carga_horaria, publico_alvo, descricao_atividade, observacoes, pre_requisitos
+  nivelamento, carga_horaria, publico_alvo, descricao_atividade, observacoes, pre_requisitos, desc_nivelamento
 )
 VALUES (
-  'sad2', 'Material A', 'Treinamento de Primeiros Socorros', 3, 'CSC', 1, 
+  'sad3a', 'Barraca CC2 Transportável', 'Treinamento de Barraca CC2 Transportável', 3, 'CSC', 1, 
   'Vinculação direta ao CMDO', 'DESMIL', 1, 2, 'Instituição A', '2024-01-10', 
   '2024-01-15', 50, 2, 1, 1, 
-  1, 'Logística do treinamento XYZ', 1, 40, 1, 'Treinamento sobre primeiros socorros com simulações práticas', '', 'Noções básicas de saúde'
+  1, 'Logística do treinamento XYZ', 1, 40, 1, 'Treinamento sobre primeiros socorros com simulações práticas', '', 'Noções básicas de saúde', ''
 );
 
 INSERT INTO tb_om (CODIGO, CODOM, SIGLA, RM, CMA, DE, CIDADEESTADO, CNPJ, Tipo, BDA, FORPRON, OMCOMMATERIAL, ENDERECO, CEP, NIVEL, ID, CODREGRA) VALUES (2, '039875', 'DECEx', '1ª RM', 'DECEx', 'Vinculação direta ao CMDO / ODS', 'Rio de Janeiro/RJ', '00.394.452/0270-52', 'ODS', 'Vinculação direta ao CMDO', '', 'Não', '', '', 1, 99, 102);
@@ -28,3 +28,25 @@ INSERT INTO tb_om (CODIGO, CODOM, SIGLA, RM, CMA, DE, CIDADEESTADO, CNPJ, Tipo, 
 INSERT INTO tb_om (CODIGO, CODOM, SIGLA, RM, CMA, DE, CIDADEESTADO, CNPJ, Tipo, BDA, FORPRON, OMCOMMATERIAL, ENDERECO, CEP, NIVEL, ID, CODREGRA) VALUES (8, '000513', 'AHEx', '1ª RM', 'CML', 'Vinculação direta ao CMDO / ODS', 'Rio de Janeiro/RJ', NULL, 'Administrativa', 'Vinculação direta ao CMDO', '', 'Não', '', '', 1, 99, 102);
 INSERT INTO tb_om (CODIGO, CODOM, SIGLA, RM, CMA, DE, CIDADEESTADO, CNPJ, Tipo, BDA, FORPRON, OMCOMMATERIAL, ENDERECO, CEP, NIVEL, ID, CODREGRA) VALUES (9, '006106', '38º BI', '1ª RM', 'CML', '1ª DE', 'Vila Velha/ES', '09.576.726/0001-41', 'Operacional', 'Vinculação direta ao CMDO', '', 'Sim', '', '', 2, 3, 8);
 INSERT INTO tb_om (CODIGO, CODOM, SIGLA, RM, CMA, DE, CIDADEESTADO, CNPJ, Tipo, BDA, FORPRON, OMCOMMATERIAL, ENDERECO, CEP, NIVEL, ID, CODREGRA) VALUES (10, '015149', 'CI Op Esp', '1ª RM', 'CML', 'Vinculação direta ao CMDO / ODS', 'Niterói/RJ', '10.197.253/0001-50', 'Ensino', 'C Op Esp', 'Sim', 'Sim', '', '', 2, 99, 101);
+
+INSERT INTO tb_turma (nome, id_treinamento) VALUES ('Turma 1', 1);
+INSERT INTO tb_turma (nome, id_treinamento) VALUES ('Turma 2', 1);
+
+INSERT INTO tb_instrutor (nome, email, contato, id_treinamento) VALUES ('Instrutor A', 'instrutorA@email.com', '+5561999120152', 1);
+
+INSERT INTO tb_posto (id, titulo) VALUES (1, 'Soldado');
+INSERT INTO tb_posto (id, titulo) VALUES (2, 'Cabo');
+INSERT INTO tb_posto (id, titulo) VALUES (3, 'Subtenente');
+INSERT INTO tb_posto (id, titulo) VALUES (4, '1º Sargento');
+INSERT INTO tb_posto (id, titulo) VALUES (5, '2º Sargento');
+INSERT INTO tb_posto (id, titulo) VALUES (6, '3º Sargento');
+INSERT INTO tb_posto (id, titulo) VALUES (7, 'Subtenente');
+INSERT INTO tb_posto (id, titulo) VALUES (8, '1º Tenente');
+INSERT INTO tb_posto (id, titulo) VALUES (9, '2º Tenente');
+INSERT INTO tb_posto (id, titulo) VALUES (10, 'Capitão');
+INSERT INTO tb_posto (id, titulo) VALUES (11, 'Major');
+INSERT INTO tb_posto (id, titulo) VALUES (12, 'Tenente-Coronel');
+INSERT INTO tb_posto (id, titulo) VALUES (13, 'Coronel');
+INSERT INTO tb_posto (id, titulo) VALUES (14, 'General de Brigada');
+INSERT INTO tb_posto (id, titulo) VALUES (15, 'General de Divisão');
+INSERT INTO tb_posto (id, titulo) VALUES (16, 'General de Exército');

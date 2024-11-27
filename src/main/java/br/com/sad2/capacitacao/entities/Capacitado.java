@@ -1,22 +1,15 @@
 package br.com.sad2.capacitacao.entities;
 
-import java.util.Date;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "tb_capacitado")
@@ -25,40 +18,42 @@ public class Capacitado {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private Integer modalidade;
-	private String brigada;
-	private String om;
-	private Integer grupo;
-	private String subsistema;
-	private String posto;
+	//Tipo = 1 - militar ou 2 - civil
+	private Integer tipo;
 	private String nomeCompleto;
+	//Apenas para militares
 	private String nomeGuerra;
+	//Contato = email e celular
 	private String email;
 	private String celular;
 	private String brigadaMilitar;
-	private String omMilitar;
+	//Instituição = Instituição para civil e OM do Militar para o militar
+	private String instituicao;
 	private Boolean avaliacaoPratica;
 	private Boolean avaliacaoTeorica;
+	private Boolean exigeNotaPratica;
+	private Boolean exigeNotaTeorica;
+	private String turma;
 	private Float notaPratica;
 	private Float notaTeorica;
 	private Boolean certificado;
 	private String tipoCertificado;
 	private String numeroBi;
-
+	private String funcao;
+	
 	@Lob
-	private String observacoes;
+	private String observacoesAvaliacaoPratica;
+	
+	@Lob
+	private String observacoesAvaliacaoTeorica;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name = "data_inicio")
-	private Date dataInicio;
-
-	@Temporal(TemporalType.DATE)
-	@Column(name = "data_fim")
-	private Date dataFim;
-
-	@ManyToMany
-	@JoinTable(name = "tb_treinamento_capacitado", joinColumns = @JoinColumn(name = "id_capacitado"), inverseJoinColumns = @JoinColumn(name = "id_treinamento"))
-	private Set<Treinamento> treinamentos = new HashSet<>();
+	@ManyToOne
+	@JoinColumn(name = "id_treinamento")
+	private Treinamento treinamento;
+	
+	@ManyToOne
+    @JoinColumn(name = "id_posto", nullable = false)
+    private Posto posto;
 
 	public Capacitado() {
 	}
@@ -71,56 +66,24 @@ public class Capacitado {
 		this.id = id;
 	}
 
-	public Integer getModalidade() {
-		return modalidade;
+	public Integer getTipo() {
+		return tipo;
 	}
 
-	public void setModalidade(Integer modalidade) {
-		this.modalidade = modalidade;
-	}
-
-	public String getBrigada() {
-		return brigada;
-	}
-
-	public void setBrigada(String brigada) {
-		this.brigada = brigada;
-	}
-
-	public String getOm() {
-		return om;
-	}
-
-	public void setOm(String om) {
-		this.om = om;
-	}
-
-	public Integer getGrupo() {
-		return grupo;
-	}
-
-	public void setGrupo(Integer grupo) {
-		this.grupo = grupo;
-	}
-
-	public String getSubsistema() {
-		return subsistema;
-	}
-
-	public void setSubsistema(String subsistema) {
-		this.subsistema = subsistema;
-	}
-
-	public String getPosto() {
-		return posto;
-	}
-
-	public void setPosto(String posto) {
-		this.posto = posto;
+	public void setTipo(Integer tipo) {
+		this.tipo = tipo;
 	}
 
 	public String getNomeCompleto() {
 		return nomeCompleto;
+	}
+
+	public Posto getPosto() {
+		return posto;
+	}
+
+	public void setPosto(Posto posto) {
+		this.posto = posto;
 	}
 
 	public void setNomeCompleto(String nomeCompleto) {
@@ -151,6 +114,14 @@ public class Capacitado {
 		this.celular = celular;
 	}
 
+	public String getTurma() {
+		return turma;
+	}
+
+	public void setTurma(String turma) {
+		this.turma = turma;
+	}
+
 	public String getBrigadaMilitar() {
 		return brigadaMilitar;
 	}
@@ -159,12 +130,12 @@ public class Capacitado {
 		this.brigadaMilitar = brigadaMilitar;
 	}
 
-	public String getOmMilitar() {
-		return omMilitar;
+	public String getInstituicao() {
+		return instituicao;
 	}
 
-	public void setOmMilitar(String omMilitar) {
-		this.omMilitar = omMilitar;
+	public void setInstituicao(String instituicao) {
+		this.instituicao = instituicao;
 	}
 
 	public Boolean getAvaliacaoPratica() {
@@ -181,6 +152,22 @@ public class Capacitado {
 
 	public void setAvaliacaoTeorica(Boolean avaliacaoTeorica) {
 		this.avaliacaoTeorica = avaliacaoTeorica;
+	}
+
+	public Boolean getExigeNotaPratica() {
+		return exigeNotaPratica;
+	}
+
+	public void setExigeNotaPratica(Boolean exijeNotaPratica) {
+		this.exigeNotaPratica = exijeNotaPratica;
+	}
+
+	public Boolean getExigeNotaTeorica() {
+		return exigeNotaTeorica;
+	}
+
+	public void setExigeNotaTeorica(Boolean exijeNotaTeorica) {
+		this.exigeNotaTeorica = exijeNotaTeorica;
 	}
 
 	public Float getNotaPratica() {
@@ -215,6 +202,14 @@ public class Capacitado {
 		this.tipoCertificado = tipoCertificado;
 	}
 
+	public String getFuncao() {
+		return funcao;
+	}
+
+	public void setFuncao(String funcao) {
+		this.funcao = funcao;
+	}
+
 	public String getNumeroBi() {
 		return numeroBi;
 	}
@@ -223,32 +218,28 @@ public class Capacitado {
 		this.numeroBi = numeroBi;
 	}
 
-	public String getObservacoes() {
-		return observacoes;
+	public String getObservacoesAvaliacaoPratica() {
+		return observacoesAvaliacaoPratica;
 	}
 
-	public void setObservacoes(String observacoes) {
-		this.observacoes = observacoes;
+	public void setObservacoesAvaliacaoPratica(String observacoesAvaliacaoPratica) {
+		this.observacoesAvaliacaoPratica = observacoesAvaliacaoPratica;
 	}
 
-	public Date getDataInicio() {
-		return dataInicio;
+	public String getObservacoesAvaliacaoTeorica() {
+		return observacoesAvaliacaoTeorica;
 	}
 
-	public void setDataInicio(Date dataInicio) {
-		this.dataInicio = dataInicio;
+	public void setObservacoesAvaliacaoTeorica(String observacoesAvaliacaoTeorica) {
+		this.observacoesAvaliacaoTeorica = observacoesAvaliacaoTeorica;
 	}
 
-	public Date getDataFim() {
-		return dataFim;
+	public void setTreinamento(Treinamento treinamento) {
+		this.treinamento = treinamento;
 	}
 
-	public void setDataFim(Date dataFim) {
-		this.dataFim = dataFim;
-	}
-
-	public Set<Treinamento> getTreinamentos() {
-		return treinamentos;
+	public Treinamento getTreinamento() {
+		return treinamento;
 	}
 
 	@Override

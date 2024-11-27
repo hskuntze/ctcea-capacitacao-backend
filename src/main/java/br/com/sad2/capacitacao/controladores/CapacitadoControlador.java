@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.sad2.capacitacao.dto.CapacitadoDTO;
-import br.com.sad2.capacitacao.dto.CapacitadoRegistroDTO;
 import br.com.sad2.capacitacao.servicos.CapacitadoServico;
 
 @RestController
@@ -48,7 +47,7 @@ public class CapacitadoControlador {
 	 * --------- POSTS ---------
 	 */
 	@PostMapping
-	public ResponseEntity<CapacitadoDTO> registrar(@RequestBody CapacitadoRegistroDTO dto) {
+	public ResponseEntity<CapacitadoDTO> registrar(@RequestBody CapacitadoDTO dto) {
 		CapacitadoDTO elemento = capacitadoServico.registrar(dto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(elemento.getId()).toUri();
 
@@ -59,7 +58,7 @@ public class CapacitadoControlador {
 	 * --------- PUT ---------
 	 */
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<CapacitadoDTO> atualizar(@PathVariable Long id, @RequestBody CapacitadoRegistroDTO dto) {
+	public ResponseEntity<CapacitadoDTO> atualizar(@PathVariable Long id, @RequestBody CapacitadoDTO dto) {
 		CapacitadoDTO atualizado = capacitadoServico.atualizar(id, dto);
 		return ResponseEntity.ok().body(atualizado);
 	}

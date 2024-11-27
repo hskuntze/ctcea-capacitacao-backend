@@ -1,8 +1,5 @@
 package br.com.sad2.capacitacao.servicos;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,10 +8,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.sad2.capacitacao.dto.CapacitadoDTO;
-import br.com.sad2.capacitacao.dto.CapacitadoRegistroDTO;
 import br.com.sad2.capacitacao.entities.Capacitado;
+import br.com.sad2.capacitacao.entities.Posto;
 import br.com.sad2.capacitacao.entities.Treinamento;
 import br.com.sad2.capacitacao.repositorios.CapacitadoRepositorio;
+import br.com.sad2.capacitacao.repositorios.PostoRepositorio;
 import br.com.sad2.capacitacao.repositorios.TreinamentoRepositorio;
 import br.com.sad2.capacitacao.servicos.excecoes.RecursoNaoEncontradoException;
 import br.com.sad2.capacitacao.servicos.excecoes.RequisicaoNaoProcessavelException;
@@ -28,7 +26,8 @@ public class CapacitadoServico {
 	@Autowired
 	private TreinamentoRepositorio treinamentoRepository;
 	
-	private static ZoneId ZONE_ID = ZoneId.of("America/Sao_Paulo");;
+	@Autowired
+	private PostoRepositorio postoRepositorio;
 
 	@Transactional(readOnly = true)
 	public List<CapacitadoDTO> buscarTodos() {
@@ -51,14 +50,16 @@ public class CapacitadoServico {
 	}
 
 	@Transactional
-	public CapacitadoDTO registrar(CapacitadoRegistroDTO dto) {
+	public CapacitadoDTO registrar(CapacitadoDTO dto) {
 		if (dto != null) {
 			Capacitado cap = new Capacitado();
 			
-			Treinamento t = treinamentoRepository.getReferenceById(dto.getIdTreinamento());
+			Treinamento t = treinamentoRepository.getReferenceById(dto.getTreinamento().getId());
+			Posto p = postoRepositorio.getReferenceById(dto.getPosto().getId());
 
 			dtoParaEntidade(cap, dto);
-			cap.getTreinamentos().add(t);
+			cap.setTreinamento(t);
+			cap.setPosto(p);
 			cap = capacitadoRepository.save(cap);
 
 			return new CapacitadoDTO(cap);
@@ -68,16 +69,17 @@ public class CapacitadoServico {
 	}
 
 	@Transactional
-	public CapacitadoDTO atualizar(Long id, CapacitadoRegistroDTO dto) {
+	public CapacitadoDTO atualizar(Long id, CapacitadoDTO dto) {
 		if (dto != null) {
 			Capacitado cap = capacitadoRepository.findById(id).orElseThrow(
 					() -> new RecursoNaoEncontradoException("Não foi possível localizar o capacitado de id: " + id));
 			
-			Treinamento t = treinamentoRepository.getReferenceById(dto.getIdTreinamento());
+			Treinamento t = treinamentoRepository.getReferenceById(dto.getTreinamento().getId());
+			Posto p = postoRepositorio.getReferenceById(dto.getPosto().getId());
 
 			dtoParaEntidade(cap, dto);
-			cap.getTreinamentos().clear();
-			cap.getTreinamentos().add(t);
+			cap.setTreinamento(t);
+			cap.setPosto(p);
 			cap = capacitadoRepository.save(cap);
 
 			return new CapacitadoDTO(cap);
@@ -91,34 +93,25 @@ public class CapacitadoServico {
 	}
 
 	private void dtoParaEntidade(Capacitado cap, CapacitadoDTO dto) {
+		cap.setTipo(dto.getTipo());
 		cap.setAvaliacaoPratica(dto.getAvaliacaoPratica());
 		cap.setAvaliacaoTeorica(dto.getAvaliacaoTeorica());
-		cap.setBrigada(dto.getBrigada());
 		cap.setBrigadaMilitar(dto.getBrigadaMilitar());
 		cap.setCelular(dto.getCelular());
 		cap.setCertificado(dto.getCertificado());
-
-		LocalDate dataInicioLocalDate = dto.getDataInicio().toInstant().atZone(ZONE_ID).toLocalDate();
-		Date dataInicio = Date.from(dataInicioLocalDate.atStartOfDay(ZONE_ID).plusDays(1).toInstant());
-		cap.setDataInicio(dataInicio);
-
-		LocalDate dataFimLocalDate = dto.getDataFim().toInstant().atZone(ZONE_ID).toLocalDate();
-		Date dataFim = Date.from(dataFimLocalDate.atStartOfDay(ZONE_ID).plusDays(1).toInstant());
-		cap.setDataFim(dataFim);
-
 		cap.setEmail(dto.getEmail());
-		cap.setGrupo(dto.getGrupo());
-		cap.setModalidade(dto.getModalidade());
 		cap.setNomeGuerra(dto.getNomeGuerra());
 		cap.setNomeCompleto(dto.getNomeCompleto());
+		cap.setExigeNotaPratica(dto.getExigeNotaPratica());
+		cap.setExigeNotaTeorica(dto.getExigeNotaTeorica());
 		cap.setNotaPratica(dto.getNotaPratica());
 		cap.setNotaTeorica(dto.getNotaTeorica());
+		cap.setTurma(dto.getTurma());
 		cap.setNumeroBi(dto.getNumeroBi());
-		cap.setObservacoes(dto.getObservacoes());
-		cap.setOm(dto.getOm());
-		cap.setOmMilitar(dto.getOmMilitar());
-		cap.setPosto(dto.getPosto());
-		cap.setSubsistema(dto.getSubsistema());
+		cap.setObservacoesAvaliacaoPratica(dto.getObservacoesAvaliacaoPratica());
+		cap.setObservacoesAvaliacaoTeorica(dto.getObservacoesAvaliacaoTeorica());
+		cap.setInstituicao(dto.getInstituicao());
 		cap.setTipoCertificado(dto.getTipoCertificado());
+		cap.setFuncao(dto.getFuncao());
 	}
 }

@@ -132,4 +132,10 @@ public class TreinamentoControlador {
 		treinamentoServico.deleteMaterialDidatico(id);
 		return ResponseEntity.noContent().build();
 	}
+	
+	@DeleteMapping(value = "/deletar/logisticaTreinamento/{id}")
+	public ResponseEntity<Void> deletarLogisticaTreinamento(@PathVariable Long id) {
+		treinamentoServico.deleteLogisticaTreinamento(id);
+		return ResponseEntity.noContent().build();
+	}
 }
