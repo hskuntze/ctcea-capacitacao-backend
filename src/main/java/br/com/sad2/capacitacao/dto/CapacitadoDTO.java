@@ -1,6 +1,8 @@
 package br.com.sad2.capacitacao.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import br.com.sad2.capacitacao.entities.Capacitado;
@@ -24,7 +26,7 @@ public class CapacitadoDTO implements Serializable {
 	private Float notaTeorica;
 	private String turma;
 	private Boolean certificado;
-	private String tipoCertificado;
+	private List<String> tipoCertificado = new ArrayList<>();
 	private String numeroBi;
 	private String observacoesAvaliacaoPratica;
 	private String observacoesAvaliacaoTeorica;
@@ -39,7 +41,11 @@ public class CapacitadoDTO implements Serializable {
 	public CapacitadoDTO(Capacitado capacitado) {
 	    this.id = capacitado.getId();
 	    this.tipo = capacitado.getTipo();
-	    this.posto = new PostoDTO(capacitado.getPosto());
+	    
+	    if(capacitado.getPosto() != null) {
+		    this.posto = new PostoDTO(capacitado.getPosto());
+	    }
+	    
 	    this.nomeCompleto = capacitado.getNomeCompleto();
 	    this.nomeGuerra = capacitado.getNomeGuerra();
 	    this.email = capacitado.getEmail();
@@ -198,11 +204,11 @@ public class CapacitadoDTO implements Serializable {
 		this.certificado = certificado;
 	}
 
-	public String getTipoCertificado() {
+	public List<String> getTipoCertificado() {
 		return tipoCertificado;
 	}
 
-	public void setTipoCertificado(String tipoCertificado) {
+	public void setTipoCertificado(List<String> tipoCertificado) {
 		this.tipoCertificado = tipoCertificado;
 	}
 

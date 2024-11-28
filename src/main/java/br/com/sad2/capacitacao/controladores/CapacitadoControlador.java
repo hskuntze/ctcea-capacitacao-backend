@@ -66,7 +66,7 @@ public class CapacitadoControlador {
 	/**
 	 * --------- DELETE ---------
 	 */
-	@DeleteMapping(value = "/{id}")
+	@DeleteMapping(value = "/deletar/{id}")
 	public ResponseEntity<Void> deletar(@PathVariable Long id) {
 		capacitadoServico.deletar(id);
 		return ResponseEntity.noContent().build();

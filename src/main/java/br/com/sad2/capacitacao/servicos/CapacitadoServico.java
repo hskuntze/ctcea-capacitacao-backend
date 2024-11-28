@@ -55,11 +55,16 @@ public class CapacitadoServico {
 			Capacitado cap = new Capacitado();
 			
 			Treinamento t = treinamentoRepository.getReferenceById(dto.getTreinamento().getId());
-			Posto p = postoRepositorio.getReferenceById(dto.getPosto().getId());
+			
 
 			dtoParaEntidade(cap, dto);
 			cap.setTreinamento(t);
-			cap.setPosto(p);
+			
+			if(dto.getTipo() == 2) {
+				Posto p = postoRepositorio.getReferenceById(dto.getPosto().getId());
+				cap.setPosto(p);
+			}
+			
 			cap = capacitadoRepository.save(cap);
 
 			return new CapacitadoDTO(cap);
@@ -75,11 +80,15 @@ public class CapacitadoServico {
 					() -> new RecursoNaoEncontradoException("Não foi possível localizar o capacitado de id: " + id));
 			
 			Treinamento t = treinamentoRepository.getReferenceById(dto.getTreinamento().getId());
-			Posto p = postoRepositorio.getReferenceById(dto.getPosto().getId());
 
 			dtoParaEntidade(cap, dto);
 			cap.setTreinamento(t);
-			cap.setPosto(p);
+			
+			if(dto.getTipo() == 2) {
+				Posto p = postoRepositorio.getReferenceById(dto.getPosto().getId());
+				cap.setPosto(p);
+			}
+			
 			cap = capacitadoRepository.save(cap);
 
 			return new CapacitadoDTO(cap);

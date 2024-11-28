@@ -1,7 +1,9 @@
 package br.com.sad2.capacitacao.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import br.com.sad2.capacitacao.entities.Treinamento;
 
@@ -35,6 +37,7 @@ public class TreinamentoBasicoDTO implements Serializable {
 	private String descricaoAtividade;
 	private String observacoes;
 	private String preRequisitos;
+	private List<TurmaDTO> turmas = new ArrayList<>();
 
 	public TreinamentoBasicoDTO() {
 	}
@@ -67,6 +70,11 @@ public class TreinamentoBasicoDTO implements Serializable {
 		this.observacoes = t.getObservacoes();
 		this.preRequisitos = t.getPreRequisitos();
 		this.descNivelamento = t.getDescNivelamento();
+		
+		this.turmas.clear();
+		t.getTurmas().forEach(turma -> {
+			this.turmas.add(new TurmaDTO(turma));
+		});
 	}
 
 	public Long getId() {
@@ -283,5 +291,9 @@ public class TreinamentoBasicoDTO implements Serializable {
 
 	public void setDescNivelamento(String descNivelamento) {
 		this.descNivelamento = descNivelamento;
+	}
+
+	public List<TurmaDTO> getTurmas() {
+		return turmas;
 	}
 }

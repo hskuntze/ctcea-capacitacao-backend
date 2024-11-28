@@ -1,7 +1,10 @@
 package br.com.sad2.capacitacao.entities;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -37,7 +40,10 @@ public class Capacitado {
 	private Float notaPratica;
 	private Float notaTeorica;
 	private Boolean certificado;
-	private String tipoCertificado;
+	
+	@Convert(converter = ListStringConverter.class)
+	private List<String> tipoCertificado = new ArrayList<String>();
+	
 	private String numeroBi;
 	private String funcao;
 	
@@ -52,7 +58,7 @@ public class Capacitado {
 	private Treinamento treinamento;
 	
 	@ManyToOne
-    @JoinColumn(name = "id_posto", nullable = false)
+    @JoinColumn(name = "id_posto")
     private Posto posto;
 
 	public Capacitado() {
@@ -193,12 +199,12 @@ public class Capacitado {
 	public void setCertificado(Boolean certificado) {
 		this.certificado = certificado;
 	}
-
-	public String getTipoCertificado() {
+	
+	public List<String> getTipoCertificado() {
 		return tipoCertificado;
 	}
 
-	public void setTipoCertificado(String tipoCertificado) {
+	public void setTipoCertificado(List<String> tipoCertificado) {
 		this.tipoCertificado = tipoCertificado;
 	}
 
