@@ -1,92 +1,80 @@
-package br.com.sad2.capacitacao.entities;
+package br.com.sad2.capacitacao.dto;
 
-import java.time.LocalDateTime;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import br.com.sad2.capacitacao.entities.Treinamento;
 
-@Entity
-@Table(name = "tb_treinamento")
-public class Treinamento {
-	
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String sad;
-    private String material;
-    private String treinamento;
-    private Integer tipo;
-    private String subsistema;
-    private Integer modalidade;
-    private String brigada;
-    private String om;
-    private Integer grupo;
-    private Integer executor;
-    private String instituicao;
+public class TreinamentoBasicoDTO implements Serializable {
+	private static final long serialVersionUID = -2265131824545407728L;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "data_inicio")
-    private Date dataInicio;
+	private Long id;
+	private String sad;
+	private String material;
+	private String treinamento;
+	private Integer tipo;
+	private String subsistema;
+	private Integer modalidade;
+	private String brigada;
+	private String om;
+	private Integer grupo;
+	private Integer executor;
+	private String instituicao;
+	private Date dataInicio;
+	private Date dataFim;
+	private Integer vagas;
+	private Integer status;
+	private Boolean avaliacaoPratica;
+	private Boolean avaliacaoTeorica;
+	private Boolean certificado;
+	private String logisticaTreinamento;
+	private Boolean nivelamento;
+	private String descNivelamento;
+	private Integer cargaHoraria;
+	private Integer publicoAlvo;
+	private String descricaoAtividade;
+	private String observacoes;
+	private String preRequisitos;
+	private List<TurmaDTO> turmas = new ArrayList<>();
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "data_fim")
-    private Date dataFim;
-    private Integer vagas;
-    private Integer status;
-    private Boolean avaliacaoPratica;
-    private Boolean avaliacaoTeorica;
-    private Boolean certificado;
-    
-    private Boolean nivelamento;
-    private Integer cargaHoraria;
-    private Integer publicoAlvo;
-    
-    @OneToMany(mappedBy = "treinamento", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Instrutor> instrutores = new ArrayList<>();
-    
-    @OneToMany(mappedBy = "treinamento", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MaterialDidaticoFile> materiaisDidaticos = new ArrayList<>();
-    
-    @OneToMany(mappedBy = "treinamento", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<LogisticaTreinamentoFile> logisticaTreinamentos = new ArrayList<>();
-    
-    @OneToMany(mappedBy = "treinamento", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Turma> turmas = new ArrayList<>();
-    
-    @Lob
-    private String descNivelamento;
-    
-    @Lob
-    private String descricaoAtividade;
-    
-    @Lob
-    private String observacoes;
-    
-    @Lob
-    private String preRequisitos;
-    
-    @Lob
-    private String logisticaTreinamento;
-    
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    
-    public Treinamento() {
+	public TreinamentoBasicoDTO() {
+	}
+
+	public TreinamentoBasicoDTO(Treinamento t) {
+		this.id = t.getId();
+		this.sad = t.getSad();
+		this.material = t.getMaterial();
+		this.treinamento = t.getTreinamento();
+		this.tipo = t.getTipo();
+		this.subsistema = t.getSubsistema();
+		this.modalidade = t.getModalidade();
+		this.brigada = t.getBrigada();
+		this.om = t.getOm();
+		this.grupo = t.getGrupo();
+		this.executor = t.getExecutor();
+		this.instituicao = t.getInstituicao();
+		this.dataInicio = t.getDataInicio();
+		this.dataFim = t.getDataFim();
+		this.vagas = t.getVagas();
+		this.status = t.getStatus();
+		this.avaliacaoPratica = t.getAvaliacaoPratica();
+		this.avaliacaoTeorica = t.getAvaliacaoTeorica();
+		this.certificado = t.getCertificado();
+		this.logisticaTreinamento = t.getLogisticaTreinamento();
+		this.nivelamento = t.getNivelamento();
+		this.cargaHoraria = t.getCargaHoraria();
+		this.publicoAlvo = t.getPublicoAlvo();
+		this.descricaoAtividade = t.getDescricaoAtividade();
+		this.observacoes = t.getObservacoes();
+		this.preRequisitos = t.getPreRequisitos();
+		this.descNivelamento = t.getDescNivelamento();
+		
+		this.turmas.clear();
+		t.getTurmas().forEach(turma -> {
+			this.turmas.add(new TurmaDTO(turma));
+		});
 	}
 
 	public Long getId() {
@@ -304,63 +292,8 @@ public class Treinamento {
 	public void setDescNivelamento(String descNivelamento) {
 		this.descNivelamento = descNivelamento;
 	}
-	
-	public LocalDateTime getCreatedAt() {
-		return createdAt;
-	}
 
-	public void setCreatedAt(LocalDateTime createdAt) {
-		this.createdAt = createdAt;
-	}
-
-	public LocalDateTime getUpdatedAt() {
-		return updatedAt;
-	}
-
-	public void setUpdatedAt(LocalDateTime updatedAt) {
-		this.updatedAt = updatedAt;
-	}
-
-	public List<Instrutor> getInstrutores() {
-		return instrutores;
-	}
-
-	public List<MaterialDidaticoFile> getMateriaisDidaticos() {
-		return materiaisDidaticos;
-	}
-
-	public List<LogisticaTreinamentoFile> getLogisticaTreinamentos() {
-		return logisticaTreinamentos;
-	}
-
-	public List<Turma> getTurmas() {
+	public List<TurmaDTO> getTurmas() {
 		return turmas;
-	}
-
-	@PrePersist
-	protected void onCreate() {
-		this.createdAt = LocalDateTime.now();
-	}
-	
-	@PreUpdate
-	protected void onUpdate() {
-		this.updatedAt = LocalDateTime.now();
-	}
-	
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Treinamento other = (Treinamento) obj;
-		return Objects.equals(id, other.id);
 	}
 }

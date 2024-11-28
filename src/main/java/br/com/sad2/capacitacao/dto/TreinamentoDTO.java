@@ -1,9 +1,9 @@
 package br.com.sad2.capacitacao.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import br.com.sad2.capacitacao.entities.Treinamento;
 
@@ -28,54 +28,67 @@ public class TreinamentoDTO implements Serializable {
 	private Integer status;
 	private Boolean avaliacaoPratica;
 	private Boolean avaliacaoTeorica;
-	private String nomeInstrutores;
-	private String contatoInstrutores;
 	private Boolean certificado;
 	private String logisticaTreinamento;
 	private Boolean nivelamento;
+	private String descNivelamento;
 	private Integer cargaHoraria;
-	private Boolean publicoAlvo;
+	private Integer publicoAlvo;
 	private String descricaoAtividade;
-	private String materialDidatico;
 	private String observacoes;
 	private String preRequisitos;
-	
-	private Set<UsuarioBasicoDTO> usuarios = new HashSet<>();
-	
+
+	private List<InstrutorDTO> instrutores = new ArrayList<>();
+	private List<MaterialDidaticoFileDTO> materiaisDidaticos = new ArrayList<>();
+	private List<LogisticaTreinamentoFileDTO> logisticaTreinamentos = new ArrayList<>();
+	private List<TurmaDTO> turmas = new ArrayList<>();
+
 	public TreinamentoDTO() {
 	}
-	
+
 	public TreinamentoDTO(Treinamento t) {
-        this.id = t.getId();
-        this.sad = t.getSad();
-        this.material = t.getMaterial();
-        this.treinamento = t.getTreinamento();
-        this.tipo = t.getTipo();
-        this.subsistema = t.getSubsistema();
-        this.modalidade = t.getModalidade();
-        this.brigada = t.getBrigada();
-        this.om = t.getOm();
-        this.grupo = t.getGrupo();
-        this.executor = t.getExecutor();
-        this.instituicao = t.getInstituicao();
-        this.dataInicio = t.getDataInicio();
-        this.dataFim = t.getDataFim();
-        this.vagas = t.getVagas();
-        this.status = t.getStatus();
-        this.avaliacaoPratica = t.getAvaliacaoPratica();
-        this.avaliacaoTeorica = t.getAvaliacaoTeorica();
-        this.nomeInstrutores = t.getNomeInstrutores();
-        this.contatoInstrutores = t.getContatoInstrutores();
-        this.certificado = t.getCertificado();
-        this.logisticaTreinamento = t.getLogisticaTreinamento();
-        this.nivelamento = t.getNivelamento();
-        this.cargaHoraria = t.getCargaHoraria();
-        this.publicoAlvo = t.getPublicoAlvo();
-        this.descricaoAtividade = t.getDescricaoAtividade();
-        this.materialDidatico = t.getMaterialDidatico();
-        this.observacoes = t.getObservacoes();
-        this.preRequisitos = t.getPreRequisitos();
-    }
+		this.id = t.getId();
+		this.sad = t.getSad();
+		this.material = t.getMaterial();
+		this.treinamento = t.getTreinamento();
+		this.tipo = t.getTipo();
+		this.subsistema = t.getSubsistema();
+		this.modalidade = t.getModalidade();
+		this.brigada = t.getBrigada();
+		this.om = t.getOm();
+		this.grupo = t.getGrupo();
+		this.executor = t.getExecutor();
+		this.instituicao = t.getInstituicao();
+		this.dataInicio = t.getDataInicio();
+		this.dataFim = t.getDataFim();
+		this.vagas = t.getVagas();
+		this.status = t.getStatus();
+		this.avaliacaoPratica = t.getAvaliacaoPratica();
+		this.avaliacaoTeorica = t.getAvaliacaoTeorica();
+		this.certificado = t.getCertificado();
+		this.logisticaTreinamento = t.getLogisticaTreinamento();
+		this.nivelamento = t.getNivelamento();
+		this.cargaHoraria = t.getCargaHoraria();
+		this.publicoAlvo = t.getPublicoAlvo();
+		this.descricaoAtividade = t.getDescricaoAtividade();
+		this.observacoes = t.getObservacoes();
+		this.preRequisitos = t.getPreRequisitos();
+		this.descNivelamento = t.getDescNivelamento();
+
+		this.instrutores.clear();
+		t.getInstrutores().forEach(instrutor -> this.instrutores.add(new InstrutorDTO(instrutor)));
+
+		this.materiaisDidaticos.clear();
+		t.getMateriaisDidaticos()
+				.forEach(material -> this.materiaisDidaticos.add(new MaterialDidaticoFileDTO(material)));
+
+		this.logisticaTreinamentos.clear();
+		t.getLogisticaTreinamentos()
+				.forEach(logistica -> this.logisticaTreinamentos.add(new LogisticaTreinamentoFileDTO(logistica)));
+
+		this.turmas.clear();
+		t.getTurmas().forEach(turma -> this.turmas.add(new TurmaDTO(turma)));
+	}
 
 	public Long getId() {
 		return id;
@@ -221,22 +234,6 @@ public class TreinamentoDTO implements Serializable {
 		this.avaliacaoTeorica = avaliacaoTeorica;
 	}
 
-	public String getNomeInstrutores() {
-		return nomeInstrutores;
-	}
-
-	public void setNomeInstrutores(String nomeInstrutores) {
-		this.nomeInstrutores = nomeInstrutores;
-	}
-
-	public String getContatoInstrutores() {
-		return contatoInstrutores;
-	}
-
-	public void setContatoInstrutores(String contatoInstrutores) {
-		this.contatoInstrutores = contatoInstrutores;
-	}
-
 	public Boolean getCertificado() {
 		return certificado;
 	}
@@ -269,11 +266,11 @@ public class TreinamentoDTO implements Serializable {
 		this.cargaHoraria = cargaHoraria;
 	}
 
-	public Boolean getPublicoAlvo() {
+	public Integer getPublicoAlvo() {
 		return publicoAlvo;
 	}
 
-	public void setPublicoAlvo(Boolean publicoAlvo) {
+	public void setPublicoAlvo(Integer publicoAlvo) {
 		this.publicoAlvo = publicoAlvo;
 	}
 
@@ -283,14 +280,6 @@ public class TreinamentoDTO implements Serializable {
 
 	public void setDescricaoAtividade(String descricaoAtividade) {
 		this.descricaoAtividade = descricaoAtividade;
-	}
-
-	public String getMaterialDidatico() {
-		return materialDidatico;
-	}
-
-	public void setMaterialDidatico(String materialDidatico) {
-		this.materialDidatico = materialDidatico;
 	}
 
 	public String getObservacoes() {
@@ -309,7 +298,31 @@ public class TreinamentoDTO implements Serializable {
 		this.preRequisitos = preRequisitos;
 	}
 
-	public Set<UsuarioBasicoDTO> getUsuarios() {
-		return usuarios;
+	public String getDescNivelamento() {
+		return descNivelamento;
+	}
+
+	public void setDescNivelamento(String descNivelamento) {
+		this.descNivelamento = descNivelamento;
+	}
+
+	public List<InstrutorDTO> getInstrutores() {
+		return instrutores;
+	}
+
+	public List<MaterialDidaticoFileDTO> getMateriaisDidaticos() {
+		return materiaisDidaticos;
+	}
+
+	public List<LogisticaTreinamentoFileDTO> getLogisticaTreinamentos() {
+		return logisticaTreinamentos;
+	}
+
+	public List<TurmaDTO> getTurmas() {
+		return turmas;
+	}
+
+	public void setTurmas(List<TurmaDTO> turmas) {
+		this.turmas = turmas;
 	}
 }
