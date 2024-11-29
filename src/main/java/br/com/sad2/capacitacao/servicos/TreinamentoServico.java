@@ -1,6 +1,9 @@
 package br.com.sad2.capacitacao.servicos;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
@@ -42,9 +45,16 @@ public class TreinamentoServico {
 
 	@Autowired
 	private MaterialDidaticoFileRepositorio materialDidaticoFileRepositorio;
-	
+
 	@Autowired
 	private LogisticaTreinamentoFileRepositorio logisticaTreinamentoRepositorio;
+
+	private static final Long MAX_FILE_SIZE = 10485760L; // 10MiB em bytes
+	//private static final Long MAX_FILE_SIZE = 1572864L; //1.5MiB em bytes
+	private static final String CURRENT_DIR = System.getProperty("user.dir");
+	private static final Path CURRENT_PATH = Paths.get(CURRENT_DIR);
+	private static final Path PARENT_PATH = CURRENT_PATH.getParent();
+	private static final Path UPLOAD_PATH = PARENT_PATH.resolve("uploads");
 
 	/**
 	 * Método que retorna todos os resultados de TreinamentoDTO
@@ -116,7 +126,7 @@ public class TreinamentoServico {
 
 			treinamento.getInstrutores().clear();
 			for (InstrutorDTO i : dto.getInstrutores()) {
-				if(i.getId() != null) {
+				if (i.getId() != null) {
 					Instrutor it = instrutorRepositorio.getReferenceById(i.getId());
 
 					it.setContato(i.getContato());
@@ -127,7 +137,7 @@ public class TreinamentoServico {
 					treinamento.getInstrutores().add(it);
 				} else {
 					Instrutor it = new Instrutor(i.getNome(), i.getEmail(), i.getContato());
-					
+
 					it.setTreinamento(treinamento);
 					treinamento.getInstrutores().add(it);
 				}
@@ -144,7 +154,7 @@ public class TreinamentoServico {
 					treinamento.getTurmas().add(tu);
 				} else {
 					Turma tu = new Turma(t.getNome());
-					
+
 					tu.setTreinamento(treinamento);
 					treinamento.getTurmas().add(tu);
 				}
@@ -159,30 +169,44 @@ public class TreinamentoServico {
 	}
 
 	/**
-	 * Função para realizar o upload de arquivo de Material Didático para o banco de dados
+	 * Função para realizar o upload de arquivo de Material Didático para o banco de
+	 * dados
+	 * 
 	 * @param file
 	 * @param idTreinamento
 	 */
 	@Transactional
 	public void uploadMaterialDidatico(MultipartFile file, Long idTreinamento) {
+		if (file.isEmpty()) {
+			throw new RequisicaoNaoProcessavelException("O arquivo está vazio.");
+		}
+
 		Treinamento treinamento = treinamentoRepositorio.findById(idTreinamento)
 				.orElseThrow(() -> new RecursoNaoEncontradoException(
 						"Treinamento com ID " + idTreinamento + " não foi encontrado."));
 
 		MaterialDidaticoFile mdf = new MaterialDidaticoFile();
 		mdf.setFileName(file.getOriginalFilename());
+		mdf.setTreinamento(treinamento);
+
 		try {
-			mdf.setFileContent(file.getBytes());
+			if (file.getSize() > MAX_FILE_SIZE) {
+				Path filePath = UPLOAD_PATH.resolve(file.getOriginalFilename());
+				Files.write(filePath, file.getBytes());
+				mdf.setFilePath(filePath.toString());
+			} else {
+				mdf.setFileContent(file.getBytes());
+			}
+			materialDidaticoFileRepositorio.save(mdf);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		mdf.setTreinamento(treinamento);
-
-		materialDidaticoFileRepositorio.save(mdf);
 	}
-	
+
 	/**
-	 * Função para realizar o upload de arquivo de Logística de Treinamento para o banco de dados
+	 * Função para realizar o upload de arquivo de Logística de Treinamento para o
+	 * banco de dados
+	 * 
 	 * @param file
 	 * @param idTreinamento
 	 */
@@ -191,7 +215,7 @@ public class TreinamentoServico {
 		Treinamento treinamento = treinamentoRepositorio.findById(idTreinamento)
 				.orElseThrow(() -> new RecursoNaoEncontradoException(
 						"Treinamento com ID " + idTreinamento + " não foi encontrado."));
-		
+
 		LogisticaTreinamentoFile ltf = new LogisticaTreinamentoFile();
 		ltf.setFileName(file.getOriginalFilename());
 		try {
@@ -200,40 +224,14 @@ public class TreinamentoServico {
 			e.printStackTrace();
 		}
 		ltf.setTreinamento(treinamento);
-		
+
 		logisticaTreinamentoRepositorio.save(ltf);
-	}
-
-	/**
-	 * Função para realizar o update de arquivo de Material Didático no banco de dados
-	 * @param file
-	 * @param idTreinamento
-	 * @param idFile
-	 */
-	@Transactional
-	public void updateMaterialDidatico(MultipartFile file, Long idTreinamento, Long idFile) {
-		Treinamento treinamento = treinamentoRepositorio.findById(idTreinamento)
-				.orElseThrow(() -> new RecursoNaoEncontradoException(
-						"Treinamento com ID " + idTreinamento + " não foi encontrado."));
-
-		MaterialDidaticoFile mdf = materialDidaticoFileRepositorio.findById(idFile).orElseThrow(
-				() -> new RecursoNaoEncontradoException("Material didático com ID " + idFile + " não foi encontrado."));
-
-		mdf.setFileName(file.getOriginalFilename());
-		try {
-			mdf.setFileContent(file.getBytes());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		mdf.setTreinamento(treinamento);
-
-		materialDidaticoFileRepositorio.save(mdf);
 	}
 
 	public void deleteMaterialDidatico(Long id) {
 		materialDidaticoFileRepositorio.deleteById(id);
 	}
-	
+
 	public void deleteLogisticaTreinamento(Long id) {
 		logisticaTreinamentoRepositorio.deleteById(id);
 	}

@@ -1,6 +1,7 @@
 package br.com.sad2.capacitacao.controladores;
 
 import java.net.URI;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -40,6 +41,15 @@ public class UsuarioControlador {
 	/**
 	 * --------- GETS ---------
 	 */
+	/**
+	 * Endpoint para resgatar todos os usuários
+	 * @param id
+	 * @return UsuarioDTO
+	 */
+	@GetMapping
+	public ResponseEntity<List<UsuarioDTO>> buscarTodos() {
+		return ResponseEntity.ok().body(usuarioServico.buscarTodos());
+	}
 	
 	/**
 	 * Endpoint para resgatar um usuário baseado em seu identificador único
@@ -64,6 +74,24 @@ public class UsuarioControlador {
 			String emailExtraido = jsonNode.get("email").asText();
 			
 			return ResponseEntity.ok().body(usuarioServico.buscarPorEmail(emailExtraido));
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().build();
+		}
+	}
+	
+	/**
+	 * Endpoint para resgatar um usuário baseado em seu email
+	 * @param email
+	 * @return UsuarioDTO
+	 */
+	@GetMapping(value = "/identidade")
+	public ResponseEntity<UsuarioDTO> buscarPorIdentidade(@RequestBody String identidade) {
+		try {
+			ObjectMapper objectMapper = new ObjectMapper();
+			JsonNode jsonNode = objectMapper.readTree(identidade);
+			String emailExtraido = jsonNode.get("identidade").asText();
+			
+			return ResponseEntity.ok().body(usuarioServico.buscarPorIdentidade(emailExtraido));
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().build();
 		}

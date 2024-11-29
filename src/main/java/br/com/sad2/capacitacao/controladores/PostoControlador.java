@@ -18,6 +18,9 @@ public class PostoControlador {
 	@Autowired
 	private PostoServico postoServico;
 	
+	/**
+	 * --------- GETS ---------
+	 */
 	@GetMapping
 	public ResponseEntity<List<PostoDTO>> buscarTodos() {
 		return ResponseEntity.ok().body(postoServico.buscarTodos());

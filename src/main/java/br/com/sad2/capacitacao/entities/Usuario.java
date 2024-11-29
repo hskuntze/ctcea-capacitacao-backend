@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -33,6 +34,16 @@ public class Usuario implements Serializable, UserDetails {
 	private String sobrenome;
 	private String email;
 	private String senha;
+	//Tipo = 1 - militar ou 2 - civil
+	private Integer tipo;
+	private String nomeGuerra;
+	private String identidade;
+	private String telefone;
+	private String instituicao;
+	
+	@ManyToOne
+    @JoinColumn(name = "id_posto")
+    private Posto posto;
 	
 	private boolean habilitado;
 	private boolean registroCompleto;
@@ -99,6 +110,58 @@ public class Usuario implements Serializable, UserDetails {
 		return id;
 	}
 
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Integer getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(Integer tipo) {
+		this.tipo = tipo;
+	}
+
+	public String getNomeGuerra() {
+		return nomeGuerra;
+	}
+
+	public void setNomeGuerra(String nomeGuerra) {
+		this.nomeGuerra = nomeGuerra;
+	}
+
+	public String getIdentidade() {
+		return identidade;
+	}
+
+	public void setIdentidade(String identidade) {
+		this.identidade = identidade;
+	}
+
+	public String getTelefone() {
+		return telefone;
+	}
+
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
+	}
+
+	public String getInstituicao() {
+		return instituicao;
+	}
+
+	public void setInstituicao(String instituicao) {
+		this.instituicao = instituicao;
+	}
+
+	public Posto getPosto() {
+		return posto;
+	}
+
+	public void setPosto(Posto posto) {
+		this.posto = posto;
+	}
+
 	public Set<Perfil> getPerfis() {
 		return perfis;
 	}
@@ -115,7 +178,7 @@ public class Usuario implements Serializable, UserDetails {
 	
 	@Override
 	public String getUsername() {
-		return email;
+		return identidade;
 	}
 	
 	public boolean isRegistroCompleto() {

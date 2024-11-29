@@ -9,6 +9,7 @@ public class MaterialDidaticoFileDTO implements Serializable {
 	
 	private Long id;
 	private String fileName;
+	private String filePath;
 	private byte[] fileContent;
 	
 	public MaterialDidaticoFileDTO() {
@@ -16,6 +17,9 @@ public class MaterialDidaticoFileDTO implements Serializable {
 	
 	public MaterialDidaticoFileDTO(MaterialDidaticoFile file) {
 		this.id = file.getId();
+		if(file.getFilePath() != null) {
+			this.filePath = file.getFilePath();
+		}
 		this.fileName = file.getFileName();
 		this.fileContent = file.getFileContent();
 	}
@@ -34,6 +38,14 @@ public class MaterialDidaticoFileDTO implements Serializable {
 
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+
+	public String getFilePath() {
+		return filePath;
+	}
+
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
 	}
 
 	public byte[] getFileContent() {

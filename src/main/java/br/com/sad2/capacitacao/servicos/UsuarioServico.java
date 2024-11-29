@@ -1,6 +1,8 @@
 package br.com.sad2.capacitacao.servicos;
 
 import java.util.Calendar;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,9 +15,11 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.sad2.capacitacao.dto.UsuarioDTO;
 import br.com.sad2.capacitacao.dto.UsuarioRegistroDTO;
 import br.com.sad2.capacitacao.entities.Perfil;
+import br.com.sad2.capacitacao.entities.Posto;
 import br.com.sad2.capacitacao.entities.Usuario;
 import br.com.sad2.capacitacao.entities.tokens.TokenVerificacao;
 import br.com.sad2.capacitacao.repositorios.PerfilRepositorio;
+import br.com.sad2.capacitacao.repositorios.PostoRepositorio;
 import br.com.sad2.capacitacao.repositorios.UsuarioRepositorio;
 import br.com.sad2.capacitacao.servicos.excecoes.ConflitoException;
 import br.com.sad2.capacitacao.servicos.excecoes.ErroProcessoException;
@@ -34,10 +38,23 @@ public class UsuarioServico implements UserDetailsService {
 	private PerfilRepositorio perfilRepositorio;
 	
 	@Autowired
+	private PostoRepositorio postoRepositorio;
+	
+	@Autowired
 	private TokenServico tokenServico;
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
+	
+	/**
+	 * Busca todos os usuários cadastrados no sistema
+	 * @return List<UsuarioDTO>
+	 */
+	@Transactional(readOnly = true)
+	public List<UsuarioDTO> buscarTodos() {
+		List<Usuario> usuarios = usuarioRepositorio.findAll();
+		return usuarios.stream().map(u -> new UsuarioDTO(u)).collect(Collectors.toList());
+	}
 	
 	/**
 	 * Busca um usuário pelo ID
@@ -65,6 +82,20 @@ public class UsuarioServico implements UserDetailsService {
 	}
 	
 	/**
+	 * Busca um usuário pela identidade
+	 * @param email
+	 * @return UsuarioDTO
+	 */
+	@Transactional(readOnly = true)
+	public UsuarioDTO buscarPorIdentidade(String identidade) {
+		Usuario usuario = usuarioRepositorio.findByIdentidade(identidade);
+		if(usuario == null) {
+			throw new RecursoNaoEncontradoException("Usuário com email " + identidade + " não foi encontrado.");
+		}
+		return new UsuarioDTO(usuario);
+	}
+	
+	/**
 	 * Registra um usuário na aplicação
 	 * @param dto
 	 * @return UsuarioDTO
@@ -72,10 +103,15 @@ public class UsuarioServico implements UserDetailsService {
 	@Transactional
 	public UsuarioDTO registrar(UsuarioRegistroDTO dto) {
 		if(dto != null) {
-			Usuario aux = usuarioRepositorio.findByEmail(dto.getEmail());
+			Usuario aux = usuarioRepositorio.findByIdentidade(dto.getEmail());
 			
 			if(aux == null) {
 				Usuario usuario = new Usuario();
+				
+				if(dto.getTipo() == 2) {
+					Posto p = postoRepositorio.getReferenceById(dto.getPosto().getId());
+					usuario.setPosto(p);
+				}
 				
 				dtoParaEntidade(usuario, dto);
 				usuario.setHabilitado(false);
@@ -85,7 +121,7 @@ public class UsuarioServico implements UserDetailsService {
 				
 				return new UsuarioDTO(usuario);
 			} else {
-				throw new RecursoExistenteException("Já existe um usuário com este email.");
+				throw new RecursoExistenteException("Já existe um usuário com este número de identidade.");
 			}
 		} else {
 			throw new RequisicaoNaoProcessavelException("Argumento nulo. Requisição improcessável.");
@@ -132,7 +168,7 @@ public class UsuarioServico implements UserDetailsService {
 	 */
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Usuario usuario = usuarioRepositorio.findByEmail(username);
+		Usuario usuario = usuarioRepositorio.findByIdentidade(username);
 		if(usuario == null) {
 			throw new RecursoNaoEncontradoException("Usuario " + username + " não foi encontrado.");
 		}
@@ -149,6 +185,11 @@ public class UsuarioServico implements UserDetailsService {
 		usuario.setNome(dto.getNome());
 		usuario.setSobrenome(dto.getSobrenome());
 		usuario.setEmail(dto.getEmail());
+		usuario.setTelefone(dto.getTelefone());
+		usuario.setIdentidade(dto.getIdentidade());
+		usuario.setNomeGuerra(dto.getNomeGuerra());
+		usuario.setInstituicao(dto.getInstituicao());
+		usuario.setTipo(dto.getTipo());
 		
 		usuario.getPerfis().clear();
 		dto.getPerfis().forEach(perfil -> {

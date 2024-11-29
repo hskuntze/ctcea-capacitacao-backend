@@ -1,7 +1,24 @@
 INSERT INTO tb_perfil (autorizacao) VALUES ('PERFIL_ADMIN');
 INSERT INTO tb_perfil (autorizacao) VALUES ('PERFIL_USUARIO');
 
-INSERT INTO tb_usuario (nome, sobrenome, email, senha, habilitado, registro_completo) VALUES ('Admin', '', 'admin@teste.com', '$2a$10$eACCYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORUYzfMQCbVBIhZ8tG', true, true);
+INSERT INTO tb_posto (id, titulo) VALUES (1, 'Soldado');
+INSERT INTO tb_posto (id, titulo) VALUES (2, 'Cabo');
+INSERT INTO tb_posto (id, titulo) VALUES (3, 'Subtenente');
+INSERT INTO tb_posto (id, titulo) VALUES (4, '1º Sargento');
+INSERT INTO tb_posto (id, titulo) VALUES (5, '2º Sargento');
+INSERT INTO tb_posto (id, titulo) VALUES (6, '3º Sargento');
+INSERT INTO tb_posto (id, titulo) VALUES (7, 'Subtenente');
+INSERT INTO tb_posto (id, titulo) VALUES (8, '1º Tenente');
+INSERT INTO tb_posto (id, titulo) VALUES (9, '2º Tenente');
+INSERT INTO tb_posto (id, titulo) VALUES (10, 'Capitão');
+INSERT INTO tb_posto (id, titulo) VALUES (11, 'Major');
+INSERT INTO tb_posto (id, titulo) VALUES (12, 'Tenente-Coronel');
+INSERT INTO tb_posto (id, titulo) VALUES (13, 'Coronel');
+INSERT INTO tb_posto (id, titulo) VALUES (14, 'General de Brigada');
+INSERT INTO tb_posto (id, titulo) VALUES (15, 'General de Divisão');
+INSERT INTO tb_posto (id, titulo) VALUES (16, 'General de Exército');
+
+INSERT INTO tb_usuario (identidade, nome, sobrenome, email, senha, tipo, nome_guerra, id_posto, telefone, habilitado, registro_completo) VALUES ('3087427', 'Admin', '', 'admin@teste.com', '$2a$10$eACCYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORUYzfMQCbVBIhZ8tG', 1, null, null, '+5561992515369', true, true);
 
 INSERT INTO tb_perfil_usuario (id_usuario, id_perfil) VALUES (1, 1);
 
@@ -34,19 +51,4 @@ INSERT INTO tb_turma (nome, id_treinamento) VALUES ('Turma 2', 1);
 
 INSERT INTO tb_instrutor (nome, email, contato, id_treinamento) VALUES ('Instrutor A', 'instrutorA@email.com', '+5561999120152', 1);
 
-INSERT INTO tb_posto (id, titulo) VALUES (1, 'Soldado');
-INSERT INTO tb_posto (id, titulo) VALUES (2, 'Cabo');
-INSERT INTO tb_posto (id, titulo) VALUES (3, 'Subtenente');
-INSERT INTO tb_posto (id, titulo) VALUES (4, '1º Sargento');
-INSERT INTO tb_posto (id, titulo) VALUES (5, '2º Sargento');
-INSERT INTO tb_posto (id, titulo) VALUES (6, '3º Sargento');
-INSERT INTO tb_posto (id, titulo) VALUES (7, 'Subtenente');
-INSERT INTO tb_posto (id, titulo) VALUES (8, '1º Tenente');
-INSERT INTO tb_posto (id, titulo) VALUES (9, '2º Tenente');
-INSERT INTO tb_posto (id, titulo) VALUES (10, 'Capitão');
-INSERT INTO tb_posto (id, titulo) VALUES (11, 'Major');
-INSERT INTO tb_posto (id, titulo) VALUES (12, 'Tenente-Coronel');
-INSERT INTO tb_posto (id, titulo) VALUES (13, 'Coronel');
-INSERT INTO tb_posto (id, titulo) VALUES (14, 'General de Brigada');
-INSERT INTO tb_posto (id, titulo) VALUES (15, 'General de Divisão');
-INSERT INTO tb_posto (id, titulo) VALUES (16, 'General de Exército');
+INSERT INTO tb_ocorrencia (titulo, id_treinamento) VALUES ('Ocorrencia 1', 1);

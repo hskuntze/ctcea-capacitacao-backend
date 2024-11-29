@@ -16,6 +16,13 @@ public class UsuarioDTO implements Serializable {
 	private String nome;
 	private String sobrenome;
 	private String email;
+	private Integer tipo;
+	private String nomeGuerra;
+	private String identidade;
+	private String telefone;
+	private String instituicao;
+	
+	private PostoDTO posto;
 	
 	private boolean habilitado;
 	private boolean registroCompleto;
@@ -32,6 +39,15 @@ public class UsuarioDTO implements Serializable {
 		this.email = usuario.getEmail();
 		this.habilitado = usuario.isHabilitado();
 		this.registroCompleto = usuario.isRegistroCompleto();
+		this.telefone = usuario.getTelefone();
+		this.tipo = usuario.getTipo();
+		this.identidade = usuario.getIdentidade();
+		this.nomeGuerra = usuario.getNomeGuerra();
+		this.instituicao = usuario.getInstituicao();
+		
+		if(usuario.getPosto() != null) {
+			this.posto = new PostoDTO(usuario.getPosto());
+		}
 		
 		this.perfis.clear();
 		usuario.getPerfis().forEach(perfil -> this.perfis.add(new PerfilDTO(perfil)));
@@ -87,6 +103,54 @@ public class UsuarioDTO implements Serializable {
 
 	public Set<PerfilDTO> getPerfis() {
 		return perfis;
+	}
+
+	public String getInstituicao() {
+		return instituicao;
+	}
+
+	public void setInstituicao(String instituicao) {
+		this.instituicao = instituicao;
+	}
+
+	public Integer getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(Integer tipo) {
+		this.tipo = tipo;
+	}
+
+	public String getNomeGuerra() {
+		return nomeGuerra;
+	}
+
+	public void setNomeGuerra(String nomeGuerra) {
+		this.nomeGuerra = nomeGuerra;
+	}
+
+	public String getIdentidade() {
+		return identidade;
+	}
+
+	public void setIdentidade(String identidade) {
+		this.identidade = identidade;
+	}
+
+	public String getTelefone() {
+		return telefone;
+	}
+
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
+	}
+
+	public PostoDTO getPosto() {
+		return posto;
+	}
+
+	public void setPosto(PostoDTO posto) {
+		this.posto = posto;
 	}
 
 	@Override

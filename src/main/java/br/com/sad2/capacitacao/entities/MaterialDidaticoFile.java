@@ -18,6 +18,7 @@ public class MaterialDidaticoFile {
 	private Long id;
 
 	private String fileName;
+	private String filePath;
 
 	@Lob
 	private byte[] fileContent;
@@ -43,6 +44,14 @@ public class MaterialDidaticoFile {
 
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+
+	public String getFilePath() {
+		return filePath;
+	}
+
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
 	}
 
 	public byte[] getFileContent() {

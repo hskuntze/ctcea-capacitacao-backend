@@ -19,6 +19,9 @@ public class OMControlador {
 	@Autowired
 	private OMServico omServico;
 	
+	/**
+	 * --------- GETS ---------
+	 */
 	@GetMapping
 	public ResponseEntity<List<OMDTO>> buscarTodos() {
 		return ResponseEntity.ok().body(omServico.buscarTodos());
