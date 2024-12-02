@@ -14,6 +14,8 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import br.com.sad2.capacitacao.entities.converters.ListStringConverter;
+
 @Entity
 @Table(name = "tb_capacitado")
 public class Capacitado {

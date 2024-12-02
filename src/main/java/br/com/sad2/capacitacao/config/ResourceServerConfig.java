@@ -28,7 +28,9 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	@Autowired
 	private JwtTokenStore store;
 
-	private static final String[] PUBLIC = { "/oauth/token", "/h2-console/**", "/usuarios/registrar", "/usuarios/confirmar" };
+	private static final String[] PUBLIC = { "/oauth/token", "/h2-console/**", "/usuarios/registrar",
+			"/usuarios/recuperar", "/usuarios/confirmar", "/usuarios/redirecionarParaTrocarSenha",
+			"/usuarios/salvarTrocaDeSenha" };
 
 	@Override
 	public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
@@ -37,15 +39,13 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
-		if(Arrays.asList(env.getActiveProfiles()).contains("test")) {
-            http.headers(headers -> headers.frameOptions().disable());
+		if (Arrays.asList(env.getActiveProfiles()).contains("test")) {
+			http.headers(headers -> headers.frameOptions().disable());
 		}
 
-        http.authorizeRequests(requests -> requests
-                .antMatchers(PUBLIC).permitAll()
-                .anyRequest().authenticated());
+		http.authorizeRequests(requests -> requests.antMatchers(PUBLIC).permitAll().anyRequest().authenticated());
 
-        http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
+		http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
 	}
 
 	@Bean

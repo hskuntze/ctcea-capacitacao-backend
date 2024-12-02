@@ -89,8 +89,21 @@ public class TreinamentoControlador {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_PDF);
 		headers.setContentDisposition(ContentDisposition.inline().filename(dto.getFileName()).build());
+		
+		byte[] fileContent;
+		
+		try {
+			if (dto.getFilePath() != null) {
+	            Path filePath = Paths.get(dto.getFilePath());
+	            fileContent = Files.readAllBytes(filePath);
+	        } else {
+	            fileContent = dto.getFileContent();
+	        }
+		} catch(IOException e) {
+			throw new RuntimeException("Erro ao ler o arquivo.", e);
+		}
 
-		return new ResponseEntity<>(dto.getFileContent(), headers, HttpStatus.OK);
+		return new ResponseEntity<>(fileContent, headers, HttpStatus.OK);
 	}
 
 	/**

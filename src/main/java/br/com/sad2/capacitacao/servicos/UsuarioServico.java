@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.sad2.capacitacao.dto.TokenSenhaDTO;
 import br.com.sad2.capacitacao.dto.UsuarioDTO;
 import br.com.sad2.capacitacao.dto.UsuarioRegistroDTO;
 import br.com.sad2.capacitacao.entities.Perfil;
@@ -26,7 +28,7 @@ import br.com.sad2.capacitacao.servicos.excecoes.ErroProcessoException;
 import br.com.sad2.capacitacao.servicos.excecoes.RecursoExistenteException;
 import br.com.sad2.capacitacao.servicos.excecoes.RecursoNaoEncontradoException;
 import br.com.sad2.capacitacao.servicos.excecoes.RequisicaoNaoProcessavelException;
-import br.com.sad2.capacitacao.servicos.excecoes.TokenInvalido;
+import br.com.sad2.capacitacao.servicos.excecoes.TokenInvalidoException;
 
 @Service
 public class UsuarioServico implements UserDetailsService {
@@ -103,12 +105,12 @@ public class UsuarioServico implements UserDetailsService {
 	@Transactional
 	public UsuarioDTO registrar(UsuarioRegistroDTO dto) {
 		if(dto != null) {
-			Usuario aux = usuarioRepositorio.findByIdentidade(dto.getEmail());
+			Usuario aux = usuarioRepositorio.findByIdentidade(dto.getIdentidade());
 			
 			if(aux == null) {
 				Usuario usuario = new Usuario();
 				
-				if(dto.getTipo() == 2) {
+				if(dto.getTipo() == 1) {
 					Posto p = postoRepositorio.getReferenceById(dto.getPosto().getId());
 					usuario.setPosto(p);
 				}
@@ -128,6 +130,20 @@ public class UsuarioServico implements UserDetailsService {
 		}
 	}
 	
+	@Transactional
+	public UsuarioDTO atualizar(Long id, UsuarioDTO dto) {
+		Usuario usuario = usuarioRepositorio.findById(id).orElseThrow(() -> new RecursoNaoEncontradoException("Usuário com ID " + id + " não foi encontrado"));
+		
+		if(dto.getTipo() == 1) {
+			Posto p = postoRepositorio.getReferenceById(dto.getPosto().getId());
+			usuario.setPosto(p);
+		}
+		
+		dtoParaEntidade(usuario, dto);
+		
+		return new UsuarioDTO(usuario);
+	}
+	
 	/**
 	 * Função para habilitar um usuário depois que for registrado
 	 * @param token
@@ -140,7 +156,7 @@ public class UsuarioServico implements UserDetailsService {
 		Calendar calendar = Calendar.getInstance();
 		
 		if((tokenVerificacao.getDataExpiracao().getTime() - calendar.getTime().getTime()) <= 0) {
-			throw new TokenInvalido("Token expirado.");
+			throw new TokenInvalidoException("Token expirado.");
 		}
 		
 		if(usuario != null) {
@@ -160,6 +176,47 @@ public class UsuarioServico implements UserDetailsService {
 		} else {
 			throw new RequisicaoNaoProcessavelException("Usuário nulo durante o processo de habilitar o usuário.");
 		}
+	}
+	
+	@Transactional
+	public void trocarSenhaDoUsuario(String novaSenha, String senhaAntiga) {
+		if(novaSenha != null && senhaAntiga != null) {
+			String username = SecurityContextHolder.getContext().getAuthentication().getName();
+			Usuario usuario = usuarioRepositorio.findByIdentidade(username);
+			
+			if(!validarSenhaAntiga(usuario, senhaAntiga)) {
+				throw new ErroProcessoException("Senha inválida.");
+			}
+			
+			usuario.setSenha(passwordEncoder.encode(novaSenha));
+			usuarioRepositorio.save(usuario);
+		} else {
+			throw new RequisicaoNaoProcessavelException("Requisição improcessável. Nova senha e/ou senha antiga estão vazias ou nulas.");
+		}
+	}
+	
+	@Transactional
+	public void trocarSenhaDoUsuarioComToken(TokenSenhaDTO dto) {
+		Usuario usuario = tokenServico.buscarUsuarioPeloTokenRecuperacao(dto.getToken());
+		
+		usuario.setSenha(passwordEncoder.encode(dto.getPassword()));
+		usuarioRepositorio.save(usuario);
+		
+		boolean deleted = tokenServico.deletarTokenRecuperacao(dto.getToken());
+		if(!deleted) {
+			throw new ErroProcessoException("Erro ao deletar token de recuperação");
+		}
+	}
+	
+	public void deletar(Long id) {
+		if(id == 1) {
+			throw new RequisicaoNaoProcessavelException("Este usuário não pode ser excluído.");
+		}
+		
+		tokenServico.deletarTokenRecuperacao(id);
+		tokenServico.deletarTokenVerificacao(id);
+		
+		usuarioRepositorio.deleteById(id);
 	}
 
 	/**
@@ -196,5 +253,15 @@ public class UsuarioServico implements UserDetailsService {
 			Perfil p = perfilRepositorio.getReferenceById(perfil.getId());
 			usuario.getPerfis().add(p);
 		});
+	}
+	
+	/**
+	 * Função que valida a senha antiga do usuário para que a troca de senha seja segura
+	 * @param usuario
+	 * @param senhaAntiga
+	 * @return boolean
+	 */
+	private boolean validarSenhaAntiga(Usuario usuario, String senhaAntiga) {
+		return passwordEncoder.matches(senhaAntiga, usuario.getSenha());
 	}
 }

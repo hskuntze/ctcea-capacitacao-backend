@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,7 +28,7 @@ public abstract class TokenAbstrato {
 	private String token;
 	private Date dataExpiracao;
 
-	@OneToOne(targetEntity = Usuario.class, fetch = FetchType.EAGER)
+	@OneToOne(targetEntity = Usuario.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(nullable = false, name = "user_id")
 	private Usuario usuario;
 

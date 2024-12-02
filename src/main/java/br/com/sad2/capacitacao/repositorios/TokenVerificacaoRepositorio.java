@@ -18,4 +18,9 @@ public interface TokenVerificacaoRepositorio extends JpaRepository<TokenVerifica
 	@Query(nativeQuery = true, value = "DELETE FROM tb_token_verificacao ttv "
 			+ "WHERE ttv.token = :token")
 	int excluirTokenVerificacaoBaseadoNoToken(String token);
+	
+	@Modifying
+	@Query(nativeQuery = true, value = "DELETE FROM tb_token_verificacao ttv "
+			+ "WHERE ttv.user_id = :id")
+	int excluirTokenVerificacaoBaseadoNoUsuario(Long id);
 }

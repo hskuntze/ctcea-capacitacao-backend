@@ -9,6 +9,7 @@ public class LogisticaTreinamentoFileDTO implements Serializable {
 
 	private Long id;
 	private String fileName;
+	private String filePath;
 	private byte[] fileContent;
 	
 	public LogisticaTreinamentoFileDTO() {
@@ -17,6 +18,7 @@ public class LogisticaTreinamentoFileDTO implements Serializable {
 	public LogisticaTreinamentoFileDTO(LogisticaTreinamentoFile file) {
 		this.id = file.getId();
 		this.fileName = file.getFileName();
+		this.filePath = file.getFilePath();
 		this.fileContent = file.getFileContent();
 	}
 
@@ -34,6 +36,14 @@ public class LogisticaTreinamentoFileDTO implements Serializable {
 
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+
+	public String getFilePath() {
+		return filePath;
+	}
+
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
 	}
 
 	public byte[] getFileContent() {

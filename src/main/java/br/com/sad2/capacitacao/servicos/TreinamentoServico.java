@@ -49,8 +49,8 @@ public class TreinamentoServico {
 	@Autowired
 	private LogisticaTreinamentoFileRepositorio logisticaTreinamentoRepositorio;
 
-	private static final Long MAX_FILE_SIZE = 10485760L; // 10MiB em bytes
-	//private static final Long MAX_FILE_SIZE = 1572864L; //1.5MiB em bytes
+	//private static final Long MAX_FILE_SIZE = 10485760L; // 10MiB em bytes
+	private static final Long MAX_FILE_SIZE = 1572864L; //1.5MiB em bytes
 	private static final String CURRENT_DIR = System.getProperty("user.dir");
 	private static final Path CURRENT_PATH = Paths.get(CURRENT_DIR);
 	private static final Path PARENT_PATH = CURRENT_PATH.getParent();
@@ -92,7 +92,8 @@ public class TreinamentoServico {
 			dtoParaEntidade(treinamento, dto);
 
 			for (InstrutorDTO i : dto.getInstrutores()) {
-				Instrutor it = new Instrutor(i.getNome(), i.getEmail(), i.getContato());
+				Instrutor it = new Instrutor();
+				instrutorDtoParaEntidade(it, i);
 				it.setTreinamento(treinamento);
 				treinamento.getInstrutores().add(it);
 			}
@@ -129,10 +130,7 @@ public class TreinamentoServico {
 				if (i.getId() != null) {
 					Instrutor it = instrutorRepositorio.getReferenceById(i.getId());
 
-					it.setContato(i.getContato());
-					it.setEmail(i.getEmail());
-					it.setNome(i.getNome());
-
+					instrutorDtoParaEntidade(it, i);
 					it.setTreinamento(treinamento);
 					treinamento.getInstrutores().add(it);
 				} else {
@@ -218,12 +216,19 @@ public class TreinamentoServico {
 
 		LogisticaTreinamentoFile ltf = new LogisticaTreinamentoFile();
 		ltf.setFileName(file.getOriginalFilename());
+		ltf.setTreinamento(treinamento);
+		
 		try {
-			ltf.setFileContent(file.getBytes());
+			if (file.getSize() > MAX_FILE_SIZE) {
+				Path filePath = UPLOAD_PATH.resolve(file.getOriginalFilename());
+				Files.write(filePath, file.getBytes());
+				ltf.setFilePath(filePath.toString());
+			} else {
+				ltf.setFileContent(file.getBytes());
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		ltf.setTreinamento(treinamento);
 
 		logisticaTreinamentoRepositorio.save(ltf);
 	}
@@ -276,5 +281,16 @@ public class TreinamentoServico {
 		treinamento.setObservacoes(dto.getObservacoes());
 		treinamento.setPreRequisitos(dto.getPreRequisitos());
 		treinamento.setDescNivelamento(dto.getDescNivelamento());
+	}
+	
+	private void instrutorDtoParaEntidade(Instrutor instrutor, InstrutorDTO dto) {
+		instrutor.setNome(dto.getNome());
+		instrutor.setEmail(dto.getEmail());
+		instrutor.setNivelConhecimento(dto.getNivelConhecimento());
+		instrutor.setCapacidadeGerirAula(dto.getCapacidadeGerirAula());
+		instrutor.setCapacidadeResposta(dto.getCapacidadeResposta());
+		instrutor.setClareza(dto.getClareza());
+		instrutor.setEngajamento(dto.getEngajamento());
+		instrutor.setContato(dto.getContato());
 	}
 }
