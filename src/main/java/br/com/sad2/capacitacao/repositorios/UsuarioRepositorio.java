@@ -10,4 +10,5 @@ import br.com.sad2.capacitacao.entities.Usuario;
 public interface UsuarioRepositorio extends JpaRepository<Usuario, Long>{
 
 	Usuario findByEmail(String email);
+	Usuario findByIdentidade(String identidade);
 }

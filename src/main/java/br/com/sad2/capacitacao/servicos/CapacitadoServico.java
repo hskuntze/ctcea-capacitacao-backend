@@ -60,7 +60,7 @@ public class CapacitadoServico {
 			dtoParaEntidade(cap, dto);
 			cap.setTreinamento(t);
 			
-			if(dto.getTipo() == 2) {
+			if(dto.getTipo() == 1) {
 				Posto p = postoRepositorio.getReferenceById(dto.getPosto().getId());
 				cap.setPosto(p);
 			}
@@ -84,7 +84,7 @@ public class CapacitadoServico {
 			dtoParaEntidade(cap, dto);
 			cap.setTreinamento(t);
 			
-			if(dto.getTipo() == 2) {
+			if(dto.getTipo() == 1) {
 				Posto p = postoRepositorio.getReferenceById(dto.getPosto().getId());
 				cap.setPosto(p);
 			}

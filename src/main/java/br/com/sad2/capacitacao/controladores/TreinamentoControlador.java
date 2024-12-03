@@ -1,6 +1,10 @@
 package br.com.sad2.capacitacao.controladores;
 
+import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,8 +65,21 @@ public class TreinamentoControlador {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_PDF);
 		headers.setContentDisposition(ContentDisposition.inline().filename(dto.getFileName()).build());
+		
+		byte[] fileContent;
+		
+		try {
+			if (dto.getFilePath() != null) {
+	            Path filePath = Paths.get(dto.getFilePath());
+	            fileContent = Files.readAllBytes(filePath);
+	        } else {
+	            fileContent = dto.getFileContent();
+	        }
+		} catch(IOException e) {
+			throw new RuntimeException("Erro ao ler o arquivo.", e);
+		}
 
-		return new ResponseEntity<>(dto.getFileContent(), headers, HttpStatus.OK);
+		return new ResponseEntity<>(fileContent, headers, HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/download/logisticaTreinamento/{id}")
@@ -72,8 +89,21 @@ public class TreinamentoControlador {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_PDF);
 		headers.setContentDisposition(ContentDisposition.inline().filename(dto.getFileName()).build());
+		
+		byte[] fileContent;
+		
+		try {
+			if (dto.getFilePath() != null) {
+	            Path filePath = Paths.get(dto.getFilePath());
+	            fileContent = Files.readAllBytes(filePath);
+	        } else {
+	            fileContent = dto.getFileContent();
+	        }
+		} catch(IOException e) {
+			throw new RuntimeException("Erro ao ler o arquivo.", e);
+		}
 
-		return new ResponseEntity<>(dto.getFileContent(), headers, HttpStatus.OK);
+		return new ResponseEntity<>(fileContent, headers, HttpStatus.OK);
 	}
 
 	/**
@@ -109,13 +139,6 @@ public class TreinamentoControlador {
 	public ResponseEntity<TreinamentoDTO> atualizar(@PathVariable Long id, @RequestBody TreinamentoDTO dto) {
 		TreinamentoDTO treinamento = treinamentoServico.atualizar(id, dto);
 		return ResponseEntity.ok().body(treinamento);
-	}
-
-	@PutMapping(value = "/atualizar/materialDidatico/{id}")
-	public ResponseEntity<String> atualizarMaterialDidatico(@PathVariable Long id,
-			@RequestParam("file") MultipartFile file, @RequestParam("id") Long treinamentoId) {
-		treinamentoServico.updateMaterialDidatico(file, treinamentoId, id);
-		return ResponseEntity.ok().body("Sucesso na atualização do arquivo de id " + id);
 	}
 
 	/**

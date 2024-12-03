@@ -9,10 +9,13 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -34,7 +37,7 @@ public class Treinamento {
     private String subsistema;
     private Integer modalidade;
     private String brigada;
-    private String om;
+    //private String om;
     private Integer grupo;
     private Integer executor;
     private String instituicao;
@@ -55,6 +58,10 @@ public class Treinamento {
     private Boolean nivelamento;
     private Integer cargaHoraria;
     private Integer publicoAlvo;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_om", nullable = false)
+    private OM om;
     
     @OneToMany(mappedBy = "treinamento", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Instrutor> instrutores = new ArrayList<>();
@@ -153,11 +160,11 @@ public class Treinamento {
 		this.brigada = brigada;
 	}
 
-	public String getOm() {
+	public OM getOm() {
 		return om;
 	}
 
-	public void setOm(String om) {
+	public void setOm(OM om) {
 		this.om = om;
 	}
 

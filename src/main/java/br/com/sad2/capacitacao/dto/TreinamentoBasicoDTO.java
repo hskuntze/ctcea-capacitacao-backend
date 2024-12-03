@@ -18,7 +18,6 @@ public class TreinamentoBasicoDTO implements Serializable {
 	private String subsistema;
 	private Integer modalidade;
 	private String brigada;
-	private String om;
 	private Integer grupo;
 	private Integer executor;
 	private String instituicao;
@@ -37,6 +36,8 @@ public class TreinamentoBasicoDTO implements Serializable {
 	private String descricaoAtividade;
 	private String observacoes;
 	private String preRequisitos;
+	
+	private OMDTO om;
 	private List<TurmaDTO> turmas = new ArrayList<>();
 
 	public TreinamentoBasicoDTO() {
@@ -51,7 +52,6 @@ public class TreinamentoBasicoDTO implements Serializable {
 		this.subsistema = t.getSubsistema();
 		this.modalidade = t.getModalidade();
 		this.brigada = t.getBrigada();
-		this.om = t.getOm();
 		this.grupo = t.getGrupo();
 		this.executor = t.getExecutor();
 		this.instituicao = t.getInstituicao();
@@ -70,6 +70,8 @@ public class TreinamentoBasicoDTO implements Serializable {
 		this.observacoes = t.getObservacoes();
 		this.preRequisitos = t.getPreRequisitos();
 		this.descNivelamento = t.getDescNivelamento();
+		
+		this.om = new OMDTO(t.getOm());
 		
 		this.turmas.clear();
 		t.getTurmas().forEach(turma -> {
@@ -141,11 +143,11 @@ public class TreinamentoBasicoDTO implements Serializable {
 		this.brigada = brigada;
 	}
 
-	public String getOm() {
+	public OMDTO getOm() {
 		return om;
 	}
 
-	public void setOm(String om) {
+	public void setOm(OMDTO om) {
 		this.om = om;
 	}
 

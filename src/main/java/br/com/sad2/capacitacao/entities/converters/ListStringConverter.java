@@ -1,4 +1,4 @@
-package br.com.sad2.capacitacao.entities;
+package br.com.sad2.capacitacao.entities.converters;
 
 import java.util.Arrays;
 import java.util.List;
