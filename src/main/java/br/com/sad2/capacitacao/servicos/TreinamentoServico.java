@@ -21,11 +21,13 @@ import br.com.sad2.capacitacao.dto.TurmaDTO;
 import br.com.sad2.capacitacao.entities.Instrutor;
 import br.com.sad2.capacitacao.entities.LogisticaTreinamentoFile;
 import br.com.sad2.capacitacao.entities.MaterialDidaticoFile;
+import br.com.sad2.capacitacao.entities.OM;
 import br.com.sad2.capacitacao.entities.Treinamento;
 import br.com.sad2.capacitacao.entities.Turma;
 import br.com.sad2.capacitacao.repositorios.InstrutorRepositorio;
 import br.com.sad2.capacitacao.repositorios.LogisticaTreinamentoFileRepositorio;
 import br.com.sad2.capacitacao.repositorios.MaterialDidaticoFileRepositorio;
+import br.com.sad2.capacitacao.repositorios.OMRepositorio;
 import br.com.sad2.capacitacao.repositorios.TreinamentoRepositorio;
 import br.com.sad2.capacitacao.repositorios.TurmaRepositorio;
 import br.com.sad2.capacitacao.servicos.excecoes.RecursoNaoEncontradoException;
@@ -49,6 +51,9 @@ public class TreinamentoServico {
 	@Autowired
 	private LogisticaTreinamentoFileRepositorio logisticaTreinamentoRepositorio;
 
+	@Autowired
+	private OMRepositorio omRepositorio;
+	
 	//private static final Long MAX_FILE_SIZE = 10485760L; // 10MiB em bytes
 	private static final Long MAX_FILE_SIZE = 1572864L; //1.5MiB em bytes
 	private static final String CURRENT_DIR = System.getProperty("user.dir");
@@ -90,6 +95,9 @@ public class TreinamentoServico {
 			Treinamento treinamento = new Treinamento();
 
 			dtoParaEntidade(treinamento, dto);
+			
+			OM om = omRepositorio.findById(dto.getOm().getCodigo()).orElseThrow(() -> new RecursoNaoEncontradoException("Treinamento com ID " + dto.getOm().getCodigo() + " não foi encontrado."));
+			treinamento.setOm(om);
 
 			for (InstrutorDTO i : dto.getInstrutores()) {
 				Instrutor it = new Instrutor();
@@ -119,6 +127,63 @@ public class TreinamentoServico {
 	 */
 	@Transactional
 	public TreinamentoDTO atualizar(Long id, TreinamentoDTO dto) {
+		if (dto != null) {
+			Treinamento treinamento = treinamentoRepositorio.findById(id).orElseThrow(
+					() -> new RecursoNaoEncontradoException("Treinamento com ID " + id + " não foi encontrado."));
+
+			dtoParaEntidade(treinamento, dto);
+			
+			OM om = omRepositorio.findById(dto.getOm().getCodigo()).orElseThrow(() -> new RecursoNaoEncontradoException("Treinamento com ID " + dto.getOm().getCodigo() + " não foi encontrado."));
+			treinamento.setOm(om);
+
+			treinamento.getInstrutores().clear();
+			for (InstrutorDTO i : dto.getInstrutores()) {
+				if (i.getId() != null) {
+					Instrutor it = instrutorRepositorio.getReferenceById(i.getId());
+
+					instrutorDtoParaEntidade(it, i);
+					it.setTreinamento(treinamento);
+					treinamento.getInstrutores().add(it);
+				} else {
+					Instrutor it = new Instrutor(i.getNome(), i.getEmail(), i.getContato());
+
+					it.setTreinamento(treinamento);
+					treinamento.getInstrutores().add(it);
+				}
+			}
+
+			treinamento.getTurmas().clear();
+			for (TurmaDTO t : dto.getTurmas()) {
+				if (t.getId() != null) {
+					Turma tu = turmaRepositorio.getReferenceById(t.getId());
+
+					tu.setNome(t.getNome());
+
+					tu.setTreinamento(treinamento);
+					treinamento.getTurmas().add(tu);
+				} else {
+					Turma tu = new Turma(t.getNome());
+
+					tu.setTreinamento(treinamento);
+					treinamento.getTurmas().add(tu);
+				}
+			}
+
+			treinamento = treinamentoRepositorio.save(treinamento);
+
+			return new TreinamentoDTO(treinamento);
+		} else {
+			throw new RequisicaoNaoProcessavelException("Argumento nulo. Requisição improcessável.");
+		}
+	}
+	
+	/**
+	 * Atualiza um Treinamento
+	 * 
+	 * @return TreinamentoDTO
+	 */
+	@Transactional
+	public Treinamento atualizarEntidade(Long id, TreinamentoDTO dto) {
 		if (dto != null) {
 			Treinamento treinamento = treinamentoRepositorio.findById(id).orElseThrow(
 					() -> new RecursoNaoEncontradoException("Treinamento com ID " + id + " não foi encontrado."));
@@ -160,7 +225,7 @@ public class TreinamentoServico {
 
 			treinamento = treinamentoRepositorio.save(treinamento);
 
-			return new TreinamentoDTO(treinamento);
+			return treinamento;
 		} else {
 			throw new RequisicaoNaoProcessavelException("Argumento nulo. Requisição improcessável.");
 		}
@@ -255,7 +320,6 @@ public class TreinamentoServico {
 		treinamento.setSubsistema(dto.getSubsistema());
 		treinamento.setModalidade(dto.getModalidade());
 		treinamento.setBrigada(dto.getBrigada());
-		treinamento.setOm(dto.getOm());
 		treinamento.setGrupo(dto.getGrupo());
 		treinamento.setExecutor(dto.getExecutor());
 		treinamento.setInstituicao(dto.getInstituicao());

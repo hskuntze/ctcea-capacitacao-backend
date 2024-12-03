@@ -15,6 +15,9 @@ public class AvaliacaoTreinamentoDTO implements Serializable {
 	private Integer questoesClaras;
 	private Integer avaliacaoGeralTreinamento;
 	private Integer abrangeuTodosObjetivos;
+	private String nomeResponsavel;
+	private String funcaoResponsavel;
+	private String comentariosSugestoes;
     private TreinamentoDTO treinamento;
     
     public AvaliacaoTreinamentoDTO() {
@@ -24,10 +27,14 @@ public class AvaliacaoTreinamentoDTO implements Serializable {
     	this.id = a.getId();
     	this.qualidadeMaterial = a.getQualidadeMaterial();
     	this.apostilaObjetiva = a.getApostilaObjetiva();
+    	this.apostilaAtualizada = a.getApostilaAtualizada();
     	this.questoesRelacionadas = a.getQuestoesRelacionadas();
     	this.questoesClaras = a.getQuestoesClaras();
     	this.avaliacaoGeralTreinamento = a.getAvaliacaoGeralTreinamento();
     	this.abrangeuTodosObjetivos = a.getAbrangeuTodosObjetivos();
+    	this.nomeResponsavel = a.getNomeResponsavel();
+    	this.funcaoResponsavel = a.getFuncaoResponsavel();
+    	this.comentariosSugestoes = a.getComentariosSugestoes();
     	
     	this.treinamento = new TreinamentoDTO(a.getTreinamento());
 	}
@@ -96,11 +103,35 @@ public class AvaliacaoTreinamentoDTO implements Serializable {
 		this.abrangeuTodosObjetivos = abrangeuTodosObjetivos;
 	}
 
+	public String getNomeResponsavel() {
+		return nomeResponsavel;
+	}
+
+	public void setNomeResponsavel(String nomeResponsavel) {
+		this.nomeResponsavel = nomeResponsavel;
+	}
+
+	public String getFuncaoResponsavel() {
+		return funcaoResponsavel;
+	}
+
+	public void setFuncaoResponsavel(String funcaoResponsavel) {
+		this.funcaoResponsavel = funcaoResponsavel;
+	}
+
 	public TreinamentoDTO getTreinamento() {
 		return treinamento;
 	}
 
 	public void setTreinamento(TreinamentoDTO treinamento) {
 		this.treinamento = treinamento;
+	}
+
+	public String getComentariosSugestoes() {
+		return comentariosSugestoes;
+	}
+
+	public void setComentariosSugestoes(String comentariosSugestoes) {
+		this.comentariosSugestoes = comentariosSugestoes;
 	}
 }

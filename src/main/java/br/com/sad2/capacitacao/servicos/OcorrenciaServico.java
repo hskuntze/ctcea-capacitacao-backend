@@ -86,9 +86,11 @@ public class OcorrenciaServico {
 	    o.setStatusClassificacao(dto.getStatusClassificacao());
 	    o.setSolucaoAdotada(dto.getSolucaoAdotada());
 	    
-	    LocalDate dataSolucaoLocalDate = dto.getDataSolucao().toInstant().atZone(ZONE).toLocalDate();
-	    Date dataSolucao = Date.from(dataSolucaoLocalDate.atStartOfDay(ZONE).plusDays(1).toInstant());
-	    o.setDataSolucao(dataSolucao);
+	    if(dto.getDataSolucao() != null) {
+		    LocalDate dataSolucaoLocalDate = dto.getDataSolucao().toInstant().atZone(ZONE).toLocalDate();
+		    Date dataSolucao = Date.from(dataSolucaoLocalDate.atStartOfDay(ZONE).plusDays(1).toInstant());
+		    o.setDataSolucao(dataSolucao);
+	    }
 	    
 	    o.setNomeResponsavelSolucao(dto.getNomeResponsavelSolucao());
 	    o.setContatoResponsavelSolucao(dto.getContatoResponsavelSolucao());

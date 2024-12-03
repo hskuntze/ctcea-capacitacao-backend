@@ -8,10 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.sad2.capacitacao.dto.AvaliacaoTreinamentoDTO;
-import br.com.sad2.capacitacao.dto.InstrutorDTO;
-import br.com.sad2.capacitacao.dto.TreinamentoDTO;
 import br.com.sad2.capacitacao.entities.AvaliacaoTreinamento;
-import br.com.sad2.capacitacao.entities.Instrutor;
 import br.com.sad2.capacitacao.entities.Treinamento;
 import br.com.sad2.capacitacao.repositorios.AvaliacaoTreinamentoRepositorio;
 import br.com.sad2.capacitacao.repositorios.TreinamentoRepositorio;
@@ -53,7 +50,7 @@ public class AvaliacaoTreinamentoServico {
 			if (t != null) {
 				AvaliacaoTreinamento at = new AvaliacaoTreinamento();
 				
-				t = treinamentoServico.atualizar(dto.getTreinamento().getId(), dto.getTreinamento());
+				t = treinamentoServico.atualizarEntidade(dto.getTreinamento().getId(), dto.getTreinamento());
 				
 				dtoParaEntidade(at, dto);
 
@@ -80,6 +77,9 @@ public class AvaliacaoTreinamentoServico {
 				AvaliacaoTreinamento at = avaliacaoTreinamentoRepositorio.findById(id)
 						.orElseThrow(() -> new RecursoNaoEncontradoException(
 								"Avaliação de treinamento com ID " + id + " não foi encontrado"));
+				
+				t = treinamentoServico.atualizarEntidade(dto.getTreinamento().getId(), dto.getTreinamento());
+				
 				dtoParaEntidade(at, dto);
 
 				at.setTreinamento(t);
@@ -108,5 +108,9 @@ public class AvaliacaoTreinamentoServico {
 		at.setQualidadeMaterial(dto.getQualidadeMaterial());
 		at.setQuestoesClaras(dto.getQuestoesClaras());
 		at.setQuestoesRelacionadas(dto.getQuestoesRelacionadas());
+		at.setNomeResponsavel(dto.getNomeResponsavel());
+		at.setFuncaoResponsavel(dto.getFuncaoResponsavel());
+		at.setComentariosSugestoes(dto.getComentariosSugestoes());
+		at.setComentariosSugestoes(dto.getComentariosSugestoes());
 	}
 }

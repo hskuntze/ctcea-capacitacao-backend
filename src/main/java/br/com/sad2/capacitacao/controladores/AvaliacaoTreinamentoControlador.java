@@ -25,6 +25,9 @@ public class AvaliacaoTreinamentoControlador {
 	@Autowired
 	private AvaliacaoTreinamentoServico avaliacaoTreinamentoServico;
 	
+	/**
+	 * --------- GET ---------
+	 */
 	@GetMapping
 	public ResponseEntity<List<AvaliacaoTreinamentoDTO>> buscarTodos() {
 		return ResponseEntity.ok().body(avaliacaoTreinamentoServico.buscarTodos());
@@ -35,6 +38,9 @@ public class AvaliacaoTreinamentoControlador {
 		return ResponseEntity.ok().body(avaliacaoTreinamentoServico.buscarPorId(id));
 	}
 	
+	/**
+	 * --------- POST ---------
+	 */
 	@PostMapping(value = "/registrar")
 	public ResponseEntity<AvaliacaoTreinamentoDTO> registrar(@RequestBody AvaliacaoTreinamentoDTO dto) {
 		AvaliacaoTreinamentoDTO av = avaliacaoTreinamentoServico.registrar(dto);
@@ -43,12 +49,18 @@ public class AvaliacaoTreinamentoControlador {
 		return ResponseEntity.created(uri).body(av);
 	}
 	
+	/**
+	 * --------- PUT ---------
+	 */
 	@PutMapping(value = "/atualizar/{id}")
 	public ResponseEntity<AvaliacaoTreinamentoDTO> atualizar(@PathVariable Long id, @RequestBody AvaliacaoTreinamentoDTO dto) {
 		AvaliacaoTreinamentoDTO av = avaliacaoTreinamentoServico.atualizar(id, dto);
 		return ResponseEntity.ok().body(av);
 	}
 	
+	/**
+	 * --------- DELETE ---------
+	 */
 	@DeleteMapping(value = "/deletar/{id}")
 	public ResponseEntity<Void> deletar(@PathVariable Long id) {
 		avaliacaoTreinamentoServico.deletar(id);

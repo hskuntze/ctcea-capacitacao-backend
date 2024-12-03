@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -48,6 +49,15 @@ public class AvaliacaoTreinamento {
 	 */
 	private Integer avaliacaoGeralTreinamento;
 	private Integer abrangeuTodosObjetivos;
+	
+	/**
+	 * Responsável pela consolidação da avaliação
+	 */
+	private String nomeResponsavel;
+	private String funcaoResponsavel;
+	
+	@Lob
+	private String comentariosSugestoes;
 	
 	@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_treinamento", nullable = false, unique = true)
@@ -126,6 +136,30 @@ public class AvaliacaoTreinamento {
 
 	public void setTreinamento(Treinamento treinamento) {
 		this.treinamento = treinamento;
+	}
+
+	public String getNomeResponsavel() {
+		return nomeResponsavel;
+	}
+
+	public void setNomeResponsavel(String nomeResponsavel) {
+		this.nomeResponsavel = nomeResponsavel;
+	}
+
+	public String getFuncaoResponsavel() {
+		return funcaoResponsavel;
+	}
+
+	public void setFuncaoResponsavel(String funcaoResponsavel) {
+		this.funcaoResponsavel = funcaoResponsavel;
+	}
+
+	public String getComentariosSugestoes() {
+		return comentariosSugestoes;
+	}
+
+	public void setComentariosSugestoes(String comentariosSugestoes) {
+		this.comentariosSugestoes = comentariosSugestoes;
 	}
 
 	@Override
