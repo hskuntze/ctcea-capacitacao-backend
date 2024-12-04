@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ContentDisposition;
@@ -28,6 +29,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import br.com.sad2.capacitacao.dto.LogisticaTreinamentoFileDTO;
 import br.com.sad2.capacitacao.dto.MaterialDidaticoFileDTO;
 import br.com.sad2.capacitacao.dto.TreinamentoDTO;
+import br.com.sad2.capacitacao.entities.TreinamentoCapacitadoFiltro;
 import br.com.sad2.capacitacao.servicos.LogisticaTreinamentoFileServico;
 import br.com.sad2.capacitacao.servicos.MaterialDidaticoFileServico;
 import br.com.sad2.capacitacao.servicos.TreinamentoServico;
@@ -53,6 +55,13 @@ public class TreinamentoControlador {
 		return ResponseEntity.ok().body(treinamentoServico.buscarTodos());
 	}
 
+	@GetMapping(value = "/filtrar")
+	public ResponseEntity<Set<TreinamentoCapacitadoFiltro>> buscarFiltro(
+			@RequestParam(defaultValue = "") String treinamento, @RequestParam(defaultValue = "") String sigla,
+			@RequestParam(defaultValue = "") String bda, @RequestParam(defaultValue = "") String nomeCompleto) {
+		return ResponseEntity.ok().body(treinamentoServico.filtrarTreinamentos(treinamento, sigla, bda, nomeCompleto));
+	}
+
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<TreinamentoDTO> buscarPorId(@PathVariable Long id) {
 		return ResponseEntity.ok().body(treinamentoServico.buscarPorId(id));
@@ -65,17 +74,17 @@ public class TreinamentoControlador {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_PDF);
 		headers.setContentDisposition(ContentDisposition.inline().filename(dto.getFileName()).build());
-		
+
 		byte[] fileContent;
-		
+
 		try {
 			if (dto.getFilePath() != null) {
-	            Path filePath = Paths.get(dto.getFilePath());
-	            fileContent = Files.readAllBytes(filePath);
-	        } else {
-	            fileContent = dto.getFileContent();
-	        }
-		} catch(IOException e) {
+				Path filePath = Paths.get(dto.getFilePath());
+				fileContent = Files.readAllBytes(filePath);
+			} else {
+				fileContent = dto.getFileContent();
+			}
+		} catch (IOException e) {
 			throw new RuntimeException("Erro ao ler o arquivo.", e);
 		}
 
@@ -89,17 +98,17 @@ public class TreinamentoControlador {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_PDF);
 		headers.setContentDisposition(ContentDisposition.inline().filename(dto.getFileName()).build());
-		
+
 		byte[] fileContent;
-		
+
 		try {
 			if (dto.getFilePath() != null) {
-	            Path filePath = Paths.get(dto.getFilePath());
-	            fileContent = Files.readAllBytes(filePath);
-	        } else {
-	            fileContent = dto.getFileContent();
-	        }
-		} catch(IOException e) {
+				Path filePath = Paths.get(dto.getFilePath());
+				fileContent = Files.readAllBytes(filePath);
+			} else {
+				fileContent = dto.getFileContent();
+			}
+		} catch (IOException e) {
 			throw new RuntimeException("Erro ao ler o arquivo.", e);
 		}
 
@@ -155,7 +164,7 @@ public class TreinamentoControlador {
 		treinamentoServico.deleteMaterialDidatico(id);
 		return ResponseEntity.noContent().build();
 	}
-	
+
 	@DeleteMapping(value = "/deletar/logisticaTreinamento/{id}")
 	public ResponseEntity<Void> deletarLogisticaTreinamento(@PathVariable Long id) {
 		treinamentoServico.deleteLogisticaTreinamento(id);
