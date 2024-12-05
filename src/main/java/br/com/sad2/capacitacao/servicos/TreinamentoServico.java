@@ -90,8 +90,8 @@ public class TreinamentoServico {
 
 	@Transactional(readOnly = true)
 	public Set<TreinamentoCapacitadoFiltro> filtrarTreinamentos(String treinamento, String sigla, String bda,
-			String nomeCompleto) {
-		List<TreinamentoCapacitadoFiltro> resultado = treinamentoRepositorio.filtrarTreinamento(treinamento, sigla, bda, nomeCompleto);
+			String nomeCompleto, Integer status) {
+		List<TreinamentoCapacitadoFiltro> resultado = treinamentoRepositorio.filtrarTreinamento(treinamento, sigla, bda, nomeCompleto, status);
 		
 		for (TreinamentoCapacitadoFiltro filtro : resultado) {
 		    // Supondo que você tenha uma lista de Capacitados em filtro

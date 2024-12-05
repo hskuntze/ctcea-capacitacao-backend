@@ -58,8 +58,9 @@ public class TreinamentoControlador {
 	@GetMapping(value = "/filtrar")
 	public ResponseEntity<Set<TreinamentoCapacitadoFiltro>> buscarFiltro(
 			@RequestParam(defaultValue = "") String treinamento, @RequestParam(defaultValue = "") String sigla,
-			@RequestParam(defaultValue = "") String bda, @RequestParam(defaultValue = "") String nomeCompleto) {
-		return ResponseEntity.ok().body(treinamentoServico.filtrarTreinamentos(treinamento, sigla, bda, nomeCompleto));
+			@RequestParam(defaultValue = "") String bda, @RequestParam(defaultValue = "") String nomeCompleto, @RequestParam(defaultValue = "-1") Integer status) {
+		Integer statusFilter = (status == -1) ? null : status;
+		return ResponseEntity.ok().body(treinamentoServico.filtrarTreinamentos(treinamento, sigla, bda, nomeCompleto, statusFilter));
 	}
 
 	@GetMapping(value = "/{id}")

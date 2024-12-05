@@ -23,7 +23,8 @@ public interface TreinamentoRepositorio extends JpaRepository<Treinamento, Long>
 		       + "WHERE LOWER(t.treinamento) LIKE LOWER(CONCAT('%',:treinamento,'%')) "
 		       + "AND LOWER(o.sigla) LIKE LOWER(CONCAT('%',:sigla,'%')) "
 		       + "AND LOWER(t.brigada) LIKE LOWER(CONCAT('%',:bda,'%')) "
-		       + "AND LOWER(c.nomeCompleto) LIKE LOWER(CONCAT('%',:nomeCompleto,'%'))"
+		       + "AND LOWER(c.nomeCompleto) LIKE LOWER(CONCAT('%',:nomeCompleto,'%')) "
+		       + "AND (:status IS NULL OR t.status = :status) "
 		       + "GROUP BY t, c.nomeCompleto")
-	List<TreinamentoCapacitadoFiltro> filtrarTreinamento(String treinamento, String sigla, String bda, String nomeCompleto);
+	List<TreinamentoCapacitadoFiltro> filtrarTreinamento(String treinamento, String sigla, String bda, String nomeCompleto, Integer status);
 }
