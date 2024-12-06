@@ -7,7 +7,9 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import br.com.sad2.capacitacao.dto.CapacitadoFiltroDTO;
 import br.com.sad2.capacitacao.dto.InstrutorDTO;
 import br.com.sad2.capacitacao.dto.TreinamentoDTO;
 import br.com.sad2.capacitacao.dto.TurmaDTO;
@@ -23,6 +26,7 @@ import br.com.sad2.capacitacao.entities.LogisticaTreinamentoFile;
 import br.com.sad2.capacitacao.entities.MaterialDidaticoFile;
 import br.com.sad2.capacitacao.entities.OM;
 import br.com.sad2.capacitacao.entities.Treinamento;
+import br.com.sad2.capacitacao.entities.TreinamentoCapacitadoFiltro;
 import br.com.sad2.capacitacao.entities.Turma;
 import br.com.sad2.capacitacao.repositorios.InstrutorRepositorio;
 import br.com.sad2.capacitacao.repositorios.LogisticaTreinamentoFileRepositorio;
@@ -53,9 +57,9 @@ public class TreinamentoServico {
 
 	@Autowired
 	private OMRepositorio omRepositorio;
-	
-	//private static final Long MAX_FILE_SIZE = 10485760L; // 10MiB em bytes
-	private static final Long MAX_FILE_SIZE = 1572864L; //1.5MiB em bytes
+
+	// private static final Long MAX_FILE_SIZE = 10485760L; // 10MiB em bytes
+	private static final Long MAX_FILE_SIZE = 1572864L; // 1.5MiB em bytes
 	private static final String CURRENT_DIR = System.getProperty("user.dir");
 	private static final Path CURRENT_PATH = Paths.get(CURRENT_DIR);
 	private static final Path PARENT_PATH = CURRENT_PATH.getParent();
@@ -84,6 +88,23 @@ public class TreinamentoServico {
 		return new TreinamentoDTO(t);
 	}
 
+	@Transactional(readOnly = true)
+	public Set<TreinamentoCapacitadoFiltro> filtrarTreinamentos(String treinamento, String sigla, String bda,
+			String nomeCompleto, Integer status) {
+		List<TreinamentoCapacitadoFiltro> resultado = treinamentoRepositorio.filtrarTreinamento(treinamento, sigla, bda, nomeCompleto, status);
+		
+		for (TreinamentoCapacitadoFiltro filtro : resultado) {
+		    // Supondo que você tenha uma lista de Capacitados em filtro
+		    String concat = filtro.getTreinamento().getCapacitados().stream().map(CapacitadoFiltroDTO::getNomeCompleto)
+		    		.collect(Collectors.joining("; "));
+		    filtro.setNomesCompletos(concat);
+		}
+		
+		Set<TreinamentoCapacitadoFiltro> resultadoUnico = new HashSet<>(resultado);
+		
+		return resultadoUnico;
+	}
+
 	/**
 	 * Registra um novo Treinamento
 	 * 
@@ -95,8 +116,9 @@ public class TreinamentoServico {
 			Treinamento treinamento = new Treinamento();
 
 			dtoParaEntidade(treinamento, dto);
-			
-			OM om = omRepositorio.findById(dto.getOm().getCodigo()).orElseThrow(() -> new RecursoNaoEncontradoException("Treinamento com ID " + dto.getOm().getCodigo() + " não foi encontrado."));
+
+			OM om = omRepositorio.findById(dto.getOm().getCodigo()).orElseThrow(() -> new RecursoNaoEncontradoException(
+					"Treinamento com ID " + dto.getOm().getCodigo() + " não foi encontrado."));
 			treinamento.setOm(om);
 
 			for (InstrutorDTO i : dto.getInstrutores()) {
@@ -132,8 +154,9 @@ public class TreinamentoServico {
 					() -> new RecursoNaoEncontradoException("Treinamento com ID " + id + " não foi encontrado."));
 
 			dtoParaEntidade(treinamento, dto);
-			
-			OM om = omRepositorio.findById(dto.getOm().getCodigo()).orElseThrow(() -> new RecursoNaoEncontradoException("Treinamento com ID " + dto.getOm().getCodigo() + " não foi encontrado."));
+
+			OM om = omRepositorio.findById(dto.getOm().getCodigo()).orElseThrow(() -> new RecursoNaoEncontradoException(
+					"Treinamento com ID " + dto.getOm().getCodigo() + " não foi encontrado."));
 			treinamento.setOm(om);
 
 			treinamento.getInstrutores().clear();
@@ -176,7 +199,7 @@ public class TreinamentoServico {
 			throw new RequisicaoNaoProcessavelException("Argumento nulo. Requisição improcessável.");
 		}
 	}
-	
+
 	/**
 	 * Atualiza um Treinamento
 	 * 
@@ -282,7 +305,7 @@ public class TreinamentoServico {
 		LogisticaTreinamentoFile ltf = new LogisticaTreinamentoFile();
 		ltf.setFileName(file.getOriginalFilename());
 		ltf.setTreinamento(treinamento);
-		
+
 		try {
 			if (file.getSize() > MAX_FILE_SIZE) {
 				Path filePath = UPLOAD_PATH.resolve(file.getOriginalFilename());
@@ -346,7 +369,7 @@ public class TreinamentoServico {
 		treinamento.setPreRequisitos(dto.getPreRequisitos());
 		treinamento.setDescNivelamento(dto.getDescNivelamento());
 	}
-	
+
 	private void instrutorDtoParaEntidade(Instrutor instrutor, InstrutorDTO dto) {
 		instrutor.setNome(dto.getNome());
 		instrutor.setEmail(dto.getEmail());
