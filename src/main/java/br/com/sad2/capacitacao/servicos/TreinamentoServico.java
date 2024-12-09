@@ -118,7 +118,7 @@ public class TreinamentoServico {
 			dtoParaEntidade(treinamento, dto);
 
 			OM om = omRepositorio.findById(dto.getOm().getCodigo()).orElseThrow(() -> new RecursoNaoEncontradoException(
-					"Treinamento com ID " + dto.getOm().getCodigo() + " não foi encontrado."));
+					"OM com ID " + dto.getOm().getCodigo() + " não foi encontrado."));
 			treinamento.setOm(om);
 
 			for (InstrutorDTO i : dto.getInstrutores()) {

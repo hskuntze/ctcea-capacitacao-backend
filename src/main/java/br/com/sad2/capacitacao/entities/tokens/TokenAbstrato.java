@@ -23,7 +23,7 @@ public abstract class TokenAbstrato {
 	private static final int EXPIRATION = 60 * 24; //24 horas
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String token;
 	private Date dataExpiracao;

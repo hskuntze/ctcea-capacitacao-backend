@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import br.com.sad2.capacitacao.dto.relatorios.TreinamentoOmDTO;
+import br.com.sad2.capacitacao.dto.relatorios.TreinamentoStatusDTO;
 import br.com.sad2.capacitacao.entities.Treinamento;
 import br.com.sad2.capacitacao.entities.TreinamentoCapacitadoFiltro;
 
@@ -27,4 +29,21 @@ public interface TreinamentoRepositorio extends JpaRepository<Treinamento, Long>
 		       + "AND (:status IS NULL OR t.status = :status) "
 		       + "GROUP BY t, c.nomeCompleto")
 	List<TreinamentoCapacitadoFiltro> filtrarTreinamento(String treinamento, String sigla, String bda, String nomeCompleto, Integer status);
+	
+	@Query("SELECT new br.com.sad2.capacitacao.dto.relatorios.TreinamentoStatusDTO(CASE "
+			+ "WHEN t.status = 1 THEN 'Cancelada' "
+			+ "WHEN t.status = 2 THEN 'Realizada' "
+			+ "WHEN t.status = 3 THEN 'Adiada' "
+			+ "ELSE 'Desconhecido' "
+			+ "END, "
+			+ "COUNT(t)) "
+			+ "FROM Treinamento t "
+			+ "GROUP BY t.status")
+	List<TreinamentoStatusDTO> relatorioQuantidadeTreinamentoPorStatus();
+	
+	@Query("SELECT new br.com.sad2.capacitacao.dto.relatorios.TreinamentoOmDTO(t.om.sigla, "
+			+ "COUNT(t)) "
+			+ "FROM Treinamento t "
+			+ "GROUP BY t.om.sigla")
+	List<TreinamentoOmDTO> relatorioQuantidadeTreinamentoPorOM();
 }
