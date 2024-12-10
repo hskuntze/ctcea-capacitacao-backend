@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -88,13 +89,21 @@ public class TreinamentoServico {
 		return new TreinamentoDTO(t);
 	}
 
+	/**
+	 * Função que filtra os treinamentos baseado nos parâmetros:
+	 * @param treinamento
+	 * @param sigla
+	 * @param bda
+	 * @param nomeCompleto
+	 * @param status
+	 */
 	@Transactional(readOnly = true)
 	public Set<TreinamentoCapacitadoFiltro> filtrarTreinamentos(String treinamento, String sigla, String bda,
 			String nomeCompleto, Integer status) {
 		List<TreinamentoCapacitadoFiltro> resultado = treinamentoRepositorio.filtrarTreinamento(treinamento, sigla, bda, nomeCompleto, status);
 		
 		for (TreinamentoCapacitadoFiltro filtro : resultado) {
-		    // Supondo que você tenha uma lista de Capacitados em filtro
+		    // Supondo que tenha uma lista de Capacitados em filtro
 		    String concat = filtro.getTreinamento().getCapacitados().stream().map(CapacitadoFiltroDTO::getNomeCompleto)
 		    		.collect(Collectors.joining("; "));
 		    filtro.setNomesCompletos(concat);
@@ -117,10 +126,12 @@ public class TreinamentoServico {
 
 			dtoParaEntidade(treinamento, dto);
 
+			//Registra a OM
 			OM om = omRepositorio.findById(dto.getOm().getCodigo()).orElseThrow(() -> new RecursoNaoEncontradoException(
 					"OM com ID " + dto.getOm().getCodigo() + " não foi encontrado."));
 			treinamento.setOm(om);
 
+			//Registra os instrutores
 			for (InstrutorDTO i : dto.getInstrutores()) {
 				Instrutor it = new Instrutor();
 				instrutorDtoParaEntidade(it, i);
@@ -128,6 +139,7 @@ public class TreinamentoServico {
 				treinamento.getInstrutores().add(it);
 			}
 
+			//Registra as turmas
 			for (TurmaDTO t : dto.getTurmas()) {
 				Turma tu = new Turma(t.getNome());
 				tu.setTreinamento(treinamento);
@@ -148,17 +160,25 @@ public class TreinamentoServico {
 	 * @return TreinamentoDTO
 	 */
 	@Transactional
-	public TreinamentoDTO atualizar(Long id, TreinamentoDTO dto) {
+	public Treinamento atualizar(Long id, TreinamentoDTO dto) {
 		if (dto != null) {
 			Treinamento treinamento = treinamentoRepositorio.findById(id).orElseThrow(
 					() -> new RecursoNaoEncontradoException("Treinamento com ID " + id + " não foi encontrado."));
+			
+			//Necessário por conta da sessão do Hibernate
+			Hibernate.initialize(treinamento.getMateriaisDidaticos());
+	        Hibernate.initialize(treinamento.getInstrutores());
+	        Hibernate.initialize(treinamento.getLogisticaTreinamentos());
+	        Hibernate.initialize(treinamento.getTurmas());
 
 			dtoParaEntidade(treinamento, dto);
 
+			//Atualiza a OM
 			OM om = omRepositorio.findById(dto.getOm().getCodigo()).orElseThrow(() -> new RecursoNaoEncontradoException(
 					"Treinamento com ID " + dto.getOm().getCodigo() + " não foi encontrado."));
 			treinamento.setOm(om);
 
+			//Atualiza os instrutores
 			treinamento.getInstrutores().clear();
 			for (InstrutorDTO i : dto.getInstrutores()) {
 				if (i.getId() != null) {
@@ -175,60 +195,7 @@ public class TreinamentoServico {
 				}
 			}
 
-			treinamento.getTurmas().clear();
-			for (TurmaDTO t : dto.getTurmas()) {
-				if (t.getId() != null) {
-					Turma tu = turmaRepositorio.getReferenceById(t.getId());
-
-					tu.setNome(t.getNome());
-
-					tu.setTreinamento(treinamento);
-					treinamento.getTurmas().add(tu);
-				} else {
-					Turma tu = new Turma(t.getNome());
-
-					tu.setTreinamento(treinamento);
-					treinamento.getTurmas().add(tu);
-				}
-			}
-
-			treinamento = treinamentoRepositorio.save(treinamento);
-
-			return new TreinamentoDTO(treinamento);
-		} else {
-			throw new RequisicaoNaoProcessavelException("Argumento nulo. Requisição improcessável.");
-		}
-	}
-
-	/**
-	 * Atualiza um Treinamento
-	 * 
-	 * @return TreinamentoDTO
-	 */
-	@Transactional
-	public Treinamento atualizarEntidade(Long id, TreinamentoDTO dto) {
-		if (dto != null) {
-			Treinamento treinamento = treinamentoRepositorio.findById(id).orElseThrow(
-					() -> new RecursoNaoEncontradoException("Treinamento com ID " + id + " não foi encontrado."));
-
-			dtoParaEntidade(treinamento, dto);
-
-			treinamento.getInstrutores().clear();
-			for (InstrutorDTO i : dto.getInstrutores()) {
-				if (i.getId() != null) {
-					Instrutor it = instrutorRepositorio.getReferenceById(i.getId());
-
-					instrutorDtoParaEntidade(it, i);
-					it.setTreinamento(treinamento);
-					treinamento.getInstrutores().add(it);
-				} else {
-					Instrutor it = new Instrutor(i.getNome(), i.getEmail(), i.getContato());
-
-					it.setTreinamento(treinamento);
-					treinamento.getInstrutores().add(it);
-				}
-			}
-
+			//Atualiza as turmas
 			treinamento.getTurmas().clear();
 			for (TurmaDTO t : dto.getTurmas()) {
 				if (t.getId() != null) {
@@ -275,6 +242,7 @@ public class TreinamentoServico {
 		mdf.setFileName(file.getOriginalFilename());
 		mdf.setTreinamento(treinamento);
 
+		//Verifica se o tamanho do arquivo é maior que o definido, se for salva no servidor. Caso contrário salva um BLOB no banco
 		try {
 			if (file.getSize() > MAX_FILE_SIZE) {
 				Path filePath = UPLOAD_PATH.resolve(file.getOriginalFilename());

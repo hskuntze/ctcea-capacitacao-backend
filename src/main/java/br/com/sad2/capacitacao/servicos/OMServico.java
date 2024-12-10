@@ -18,12 +18,21 @@ public class OMServico {
 	@Autowired
 	private OMRepositorio omRepositorio;
 
+	/**
+	 * Busca todas as OM's
+	 * @return
+	 */
 	@Transactional(readOnly = true)
 	public List<OMDTO> buscarTodos() {
 		List<OM> oms = omRepositorio.findAll();
 		return oms.stream().map(om -> new OMDTO(om)).collect(Collectors.toList());
 	}
 
+	/**
+	 * Busca por uma OM através do código dela
+	 * @param id
+	 * @return
+	 */
 	@Transactional(readOnly = true)
 	public OMDTO buscarPorId(Long id) {
 		OM om = omRepositorio.findById(id)
@@ -31,6 +40,10 @@ public class OMServico {
 		return new OMDTO(om);
 	}
 	
+	/**
+	 * Retorna todos as brigadas de forma distinta
+	 * @return
+	 */
 	@Transactional(readOnly = true)
 	public List<String> buscarBDAsDistintos(){
 		List<String> bdas = omRepositorio.buscarBDADistintos();

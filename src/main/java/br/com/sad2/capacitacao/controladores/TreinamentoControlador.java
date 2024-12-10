@@ -29,6 +29,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import br.com.sad2.capacitacao.dto.LogisticaTreinamentoFileDTO;
 import br.com.sad2.capacitacao.dto.MaterialDidaticoFileDTO;
 import br.com.sad2.capacitacao.dto.TreinamentoDTO;
+import br.com.sad2.capacitacao.entities.Treinamento;
 import br.com.sad2.capacitacao.entities.TreinamentoCapacitadoFiltro;
 import br.com.sad2.capacitacao.servicos.LogisticaTreinamentoFileServico;
 import br.com.sad2.capacitacao.servicos.MaterialDidaticoFileServico;
@@ -147,7 +148,8 @@ public class TreinamentoControlador {
 	 */
 	@PutMapping(value = "/atualizar/{id}")
 	public ResponseEntity<TreinamentoDTO> atualizar(@PathVariable Long id, @RequestBody TreinamentoDTO dto) {
-		TreinamentoDTO treinamento = treinamentoServico.atualizar(id, dto);
+		Treinamento t = treinamentoServico.atualizar(id, dto);
+		TreinamentoDTO treinamento = new TreinamentoDTO(t);
 		return ResponseEntity.ok().body(treinamento);
 	}
 

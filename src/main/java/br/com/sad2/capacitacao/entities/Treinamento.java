@@ -23,6 +23,13 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+/**
+ * PRINCIPAL ENTIDADE DO SISTEMA
+ * 
+ * A entidade "Treinamento" é o ponto focal do sistema. As classes Instrutor, Turma,
+ * MaterialDidaticoFile, LogisticaTreinamentoFile e Capacitado dependem da existência
+ * do registro de Treinamento.
+ */
 @Entity
 @Table(name = "tb_treinamento")
 public class Treinamento {

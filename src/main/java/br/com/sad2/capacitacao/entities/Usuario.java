@@ -36,14 +36,24 @@ public class Usuario implements Serializable, UserDetails {
 	private String senha;
 	//Tipo = 1 - militar ou 2 - civil
 	private Integer tipo;
-	private String nomeGuerra;
 	private String identidade;
 	private String telefone;
 	private String instituicao;
+	private String funcao;
+
+	//Apenas para militares
+	private String nomeGuerra;
+	private String brigada;
 	
+	//Apenas para militares
 	@ManyToOne
     @JoinColumn(name = "id_posto")
     private Posto posto;
+	
+	//Apenas para militares
+	@ManyToOne
+	@JoinColumn(name = "id_om")
+	private OM om;
 	
 	private boolean habilitado;
 	private boolean registroCompleto;
@@ -152,6 +162,30 @@ public class Usuario implements Serializable, UserDetails {
 
 	public void setInstituicao(String instituicao) {
 		this.instituicao = instituicao;
+	}
+
+	public String getFuncao() {
+		return funcao;
+	}
+
+	public void setFuncao(String funcao) {
+		this.funcao = funcao;
+	}
+
+	public String getBrigada() {
+		return brigada;
+	}
+
+	public void setBrigada(String brigada) {
+		this.brigada = brigada;
+	}
+
+	public OM getOm() {
+		return om;
+	}
+
+	public void setOm(OM om) {
+		this.om = om;
 	}
 
 	public Posto getPosto() {

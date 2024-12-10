@@ -16,10 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.sad2.capacitacao.dto.TokenSenhaDTO;
 import br.com.sad2.capacitacao.dto.UsuarioDTO;
 import br.com.sad2.capacitacao.dto.UsuarioRegistroDTO;
+import br.com.sad2.capacitacao.entities.OM;
 import br.com.sad2.capacitacao.entities.Perfil;
 import br.com.sad2.capacitacao.entities.Posto;
 import br.com.sad2.capacitacao.entities.Usuario;
 import br.com.sad2.capacitacao.entities.tokens.TokenVerificacao;
+import br.com.sad2.capacitacao.repositorios.OMRepositorio;
 import br.com.sad2.capacitacao.repositorios.PerfilRepositorio;
 import br.com.sad2.capacitacao.repositorios.PostoRepositorio;
 import br.com.sad2.capacitacao.repositorios.UsuarioRepositorio;
@@ -41,6 +43,9 @@ public class UsuarioServico implements UserDetailsService {
 	
 	@Autowired
 	private PostoRepositorio postoRepositorio;
+	
+	@Autowired
+	private OMRepositorio omRepositorio;
 	
 	@Autowired
 	private TokenServico tokenServico;
@@ -113,6 +118,11 @@ public class UsuarioServico implements UserDetailsService {
 				if(dto.getTipo() == 1) {
 					Posto p = postoRepositorio.getReferenceById(dto.getPosto().getId());
 					usuario.setPosto(p);
+					
+					OM om = omRepositorio.getReferenceById(dto.getOm().getCodigo());
+					usuario.setOm(om);
+					
+					usuario.setBrigada(dto.getBrigada());
 				}
 				
 				dtoParaEntidade(usuario, dto);
@@ -137,6 +147,11 @@ public class UsuarioServico implements UserDetailsService {
 		if(dto.getTipo() == 1) {
 			Posto p = postoRepositorio.getReferenceById(dto.getPosto().getId());
 			usuario.setPosto(p);
+			
+			OM om = omRepositorio.getReferenceById(dto.getOm().getCodigo());
+			usuario.setOm(om);
+			
+			usuario.setBrigada(dto.getBrigada());
 		}
 		
 		dtoParaEntidade(usuario, dto);
@@ -247,6 +262,7 @@ public class UsuarioServico implements UserDetailsService {
 		usuario.setNomeGuerra(dto.getNomeGuerra());
 		usuario.setInstituicao(dto.getInstituicao());
 		usuario.setTipo(dto.getTipo());
+		usuario.setFuncao(dto.getFuncao());
 		
 		usuario.getPerfis().clear();
 		dto.getPerfis().forEach(perfil -> {
