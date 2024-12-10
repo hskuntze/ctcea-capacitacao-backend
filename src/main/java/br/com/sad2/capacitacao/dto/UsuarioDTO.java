@@ -21,8 +21,11 @@ public class UsuarioDTO implements Serializable {
 	private String identidade;
 	private String telefone;
 	private String instituicao;
+	private String funcao;
+	private String brigada;
 	
 	private PostoDTO posto;
+	private OMDTO om;
 	
 	private boolean habilitado;
 	private boolean registroCompleto;
@@ -44,6 +47,12 @@ public class UsuarioDTO implements Serializable {
 		this.identidade = usuario.getIdentidade();
 		this.nomeGuerra = usuario.getNomeGuerra();
 		this.instituicao = usuario.getInstituicao();
+		this.funcao = usuario.getFuncao();
+		this.brigada = usuario.getBrigada();
+		
+		if(usuario.getOm() != null) {
+			this.om = new OMDTO(usuario.getOm());
+		}
 		
 		if(usuario.getPosto() != null) {
 			this.posto = new PostoDTO(usuario.getPosto());
@@ -113,6 +122,14 @@ public class UsuarioDTO implements Serializable {
 		this.instituicao = instituicao;
 	}
 
+	public String getFuncao() {
+		return funcao;
+	}
+
+	public void setFuncao(String funcao) {
+		this.funcao = funcao;
+	}
+
 	public Integer getTipo() {
 		return tipo;
 	}
@@ -151,6 +168,22 @@ public class UsuarioDTO implements Serializable {
 
 	public void setPosto(PostoDTO posto) {
 		this.posto = posto;
+	}
+
+	public String getBrigada() {
+		return brigada;
+	}
+
+	public void setBrigada(String brigada) {
+		this.brigada = brigada;
+	}
+
+	public OMDTO getOm() {
+		return om;
+	}
+
+	public void setOm(OMDTO om) {
+		this.om = om;
 	}
 
 	@Override

@@ -27,12 +27,20 @@ public class AvaliacaoTreinamentoServico {
 	@Autowired
 	private TreinamentoServico treinamentoServico;
 
+	/**
+	 * Busca todos os registros de Avaliação de Treinamento
+	 */
 	@Transactional(readOnly = true)
 	public List<AvaliacaoTreinamentoDTO> buscarTodos() {
 		List<AvaliacaoTreinamento> avaliacoes = avaliacaoTreinamentoRepositorio.findAll();
 		return avaliacoes.stream().map(a -> new AvaliacaoTreinamentoDTO(a)).collect(Collectors.toList());
 	}
 
+	/**
+	 * Busca uma avaliação baseado no ID
+	 * @param id
+	 * @return
+	 */
 	@Transactional(readOnly = true)
 	public AvaliacaoTreinamentoDTO buscarPorId(Long id) {
 		AvaliacaoTreinamento avaliacao = avaliacaoTreinamentoRepositorio.findById(id)
@@ -41,6 +49,10 @@ public class AvaliacaoTreinamentoServico {
 		return new AvaliacaoTreinamentoDTO(avaliacao);
 	}
 
+	/**
+	 * Registra uma avaliação
+	 * @param dto
+	 */
 	@Transactional
 	public AvaliacaoTreinamentoDTO registrar(AvaliacaoTreinamentoDTO dto) {
 		if (dto.getTreinamento() != null) {
@@ -50,7 +62,7 @@ public class AvaliacaoTreinamentoServico {
 			if (t != null) {
 				AvaliacaoTreinamento at = new AvaliacaoTreinamento();
 				
-				t = treinamentoServico.atualizarEntidade(dto.getTreinamento().getId(), dto.getTreinamento());
+				t = treinamentoServico.atualizar(dto.getTreinamento().getId(), dto.getTreinamento());
 				
 				dtoParaEntidade(at, dto);
 
@@ -67,6 +79,11 @@ public class AvaliacaoTreinamentoServico {
 		}
 	}
 
+	/**
+	 * Atualiza o registro de uma avaliação
+	 * @param id
+	 * @param dto
+	 */
 	@Transactional
 	public AvaliacaoTreinamentoDTO atualizar(Long id, AvaliacaoTreinamentoDTO dto) {
 		if (dto.getTreinamento() != null) {
@@ -78,7 +95,7 @@ public class AvaliacaoTreinamentoServico {
 						.orElseThrow(() -> new RecursoNaoEncontradoException(
 								"Avaliação de treinamento com ID " + id + " não foi encontrado"));
 				
-				t = treinamentoServico.atualizarEntidade(dto.getTreinamento().getId(), dto.getTreinamento());
+				t = treinamentoServico.atualizar(dto.getTreinamento().getId(), dto.getTreinamento());
 				
 				dtoParaEntidade(at, dto);
 

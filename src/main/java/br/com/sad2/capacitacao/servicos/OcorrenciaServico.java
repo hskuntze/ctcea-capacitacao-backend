@@ -28,18 +28,31 @@ public class OcorrenciaServico {
 	
 	private static final ZoneId ZONE = ZoneId.of("America/Sao_Paulo");
 	
+	/**
+	 * Busca todos os registros de ocorrência
+	 * @return
+	 */
 	@Transactional(readOnly = true)
 	public List<OcorrenciaDTO> buscarTodos() {
 		List<Ocorrencia> lista = ocorrenciaRepositorio.findAll();
 		return lista.stream().map(o -> new OcorrenciaDTO(o)).collect(Collectors.toList());
 	}
 	
+	/**
+	 * Busca uma ocorrência através do ID
+	 * @param id
+	 * @return
+	 */
 	@Transactional(readOnly = true)
 	public OcorrenciaDTO buscarPorId(Long id) {
 		Ocorrencia o = ocorrenciaRepositorio.findById(id).orElseThrow(() -> new RecursoNaoEncontradoException("Ocorrência com ID " + id + " não foi encontrada."));
 		return new OcorrenciaDTO(o);
 	}
 	
+	/**
+	 * Registra uma ocorrência
+	 * @param dto
+	 */
 	@Transactional
 	public OcorrenciaDTO registrar(OcorrenciaDTO dto) {
 		Ocorrencia o = new Ocorrencia();
@@ -53,6 +66,10 @@ public class OcorrenciaServico {
 		return new OcorrenciaDTO(o);
 	}
 	
+	/**
+	 * Atualiza uma ocorrência
+	 * @param dto
+	 */
 	@Transactional
 	public OcorrenciaDTO atualizar(Long id, OcorrenciaDTO dto) {
 		Ocorrencia o = ocorrenciaRepositorio.findById(id).orElseThrow(() -> new RecursoNaoEncontradoException("Ocorrência com ID " + id + " não foi encontrada."));

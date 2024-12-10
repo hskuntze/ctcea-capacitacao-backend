@@ -34,6 +34,14 @@ public class EmailServico {
 		this.templateEngine = ste;
 	}
 	
+	/**
+	 * Função que envia um e-mail usando template gerenciado pelo Thymeleaf 
+	 * @param template
+	 * @param to
+	 * @param subject
+	 * @param variables
+	 * @return String "Sucesso"; em caso de falha EmailException
+	 */
 	public String enviarEmailHtmlComThymeleaf(String template, String to, String subject, Map<String, Object> variables) {
 		try {
 			MimeMessage message = mailSender.createMimeMessage();
@@ -58,6 +66,15 @@ public class EmailServico {
 		}
 	}
 	
+	/**
+	 * Função que envia e-mail com anexos
+	 * @param to
+	 * @param subject
+	 * @param file
+	 * @param text
+	 * @param fileName
+	 * @return String "Sucesso"; em caso de falha EmailException
+	 */
 	public String enviarEmailComAnexo(String to, String subject, byte[] file, String text, String fileName) {
 		try {
 			File pdfFile = formatarBytesParaArquivo(file, fileName);

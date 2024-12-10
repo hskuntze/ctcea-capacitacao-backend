@@ -29,19 +29,30 @@ public class CapacitadoServico {
 	@Autowired
 	private PostoRepositorio postoRepositorio;
 
+	/**
+	 * Busca todos os registros
+	 */
 	@Transactional(readOnly = true)
 	public List<CapacitadoDTO> buscarTodos() {
 		List<Capacitado> capacitados = capacitadoRepository.findAll();
 		return capacitados.stream().map(cap -> new CapacitadoDTO(cap)).collect(Collectors.toList());
 	}
 
+	/**
+	 * Busca por e-mail
+	 * @param email
+	 */
 	@Transactional(readOnly = true)
 	public CapacitadoDTO buscarPorEmail(String email) {
 		Capacitado cap = capacitadoRepository.findByEmail(email).orElseThrow(() -> new RecursoNaoEncontradoException(
 				"Não foi possível localizar o capacitado com e-mail: " + email));
 		return new CapacitadoDTO(cap);
 	}
-
+	
+	/**
+	 * Busca por ID
+	 * @param id
+	 */
 	@Transactional(readOnly = true)
 	public CapacitadoDTO buscarPorId(Long id) {
 		Capacitado cap = capacitadoRepository.findById(id).orElseThrow(
@@ -49,6 +60,11 @@ public class CapacitadoServico {
 		return new CapacitadoDTO(cap);
 	}
 
+	/**
+	 * Função que registra um capacitado
+	 * @param dto
+	 * @return
+	 */
 	@Transactional
 	public CapacitadoDTO registrar(CapacitadoDTO dto) {
 		if (dto != null) {
@@ -60,6 +76,7 @@ public class CapacitadoServico {
 			dtoParaEntidade(cap, dto);
 			cap.setTreinamento(t);
 			
+			//Se for "Militar"
 			if(dto.getTipo() == 1) {
 				Posto p = postoRepositorio.getReferenceById(dto.getPosto().getId());
 				cap.setPosto(p);
@@ -73,6 +90,12 @@ public class CapacitadoServico {
 		}
 	}
 
+	/**
+	 * Função que atualiza o registro de um capacitado
+	 * @param id
+	 * @param dto
+	 * @return
+	 */
 	@Transactional
 	public CapacitadoDTO atualizar(Long id, CapacitadoDTO dto) {
 		if (dto != null) {
@@ -84,6 +107,7 @@ public class CapacitadoServico {
 			dtoParaEntidade(cap, dto);
 			cap.setTreinamento(t);
 			
+			//Se for "Militar"
 			if(dto.getTipo() == 1) {
 				Posto p = postoRepositorio.getReferenceById(dto.getPosto().getId());
 				cap.setPosto(p);
