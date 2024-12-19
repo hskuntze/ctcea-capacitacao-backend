@@ -25,7 +25,7 @@ import javax.persistence.TemporalType;
 
 /**
  * PRINCIPAL ENTIDADE DO SISTEMA
- * 
+ * <p>
  * A entidade "Treinamento" é o ponto focal do sistema. As classes Instrutor, Turma,
  * MaterialDidaticoFile, LogisticaTreinamentoFile e Capacitado dependem da existência
  * do registro de Treinamento.

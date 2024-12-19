@@ -36,6 +36,11 @@ public class TokenServico {
 	@Autowired
 	private EmailServico emailServico;
 
+	/**
+	 * Busca um Usuario baseado no token de recuperação/troca de senha
+	 * @param token
+	 * @return
+	 */
 	@Transactional(readOnly = true)
 	public Usuario buscarUsuarioPeloTokenRecuperacao(String token) {
 		Usuario usuario = tokenRecuperacaoRepositorio.findUsuarioByToken(token)
@@ -45,6 +50,11 @@ public class TokenServico {
 		return usuario;
 	}
 
+	/**
+	 * Busca por um TokenVerificacao baseado no token
+	 * @param token
+	 * @return
+	 */
 	@Transactional(readOnly = true)
 	public TokenVerificacao buscarTokenVerificacaoPeloToken(String token) {
 		Optional<TokenVerificacao> tk = tokenVerificacaoRepositorio.findByToken(token);
@@ -56,6 +66,11 @@ public class TokenServico {
 		return tk.get();
 	}
 
+	/**
+	 * Busca por um TokenRecuperacaoSenha baseado no token
+	 * @param token
+	 * @return
+	 */
 	@Transactional(readOnly = true)
 	public TokenRecuperacaoSenha buscarTokenRecuperacaoPeloToken(String token) {
 		Optional<TokenRecuperacaoSenha> tk = tokenRecuperacaoRepositorio.findByToken(token);
@@ -67,6 +82,12 @@ public class TokenServico {
 		return tk.get();
 	}
 
+	/**
+	 * Faz a validação de um token de recuperação/troca de senha. Verifica se o tempo do token
+	 * ainda está válido. Caso não esteja uma exceção será lançada. O token é válido por 24h a partir
+	 * do momento de criação.
+	 * @param token
+	 */
 	@Transactional(readOnly = true)
 	public void validarTokenRecuperacao(String token) {
 		Optional<TokenRecuperacaoSenha> tk = tokenRecuperacaoRepositorio.findByToken(token);
@@ -83,6 +104,11 @@ public class TokenServico {
 		}
 	}
 
+	/**
+	 * Cria um token de verificação/confirmação de registro e associa ele a um usuário
+	 * @param dto
+	 * @param token
+	 */
 	@Transactional
 	public void criarTokenVerificacao(UsuarioDTO dto, String token) {
 		if (dto != null && token != null) {
@@ -96,6 +122,11 @@ public class TokenServico {
 		}
 	}
 
+	/**
+	 * Cria um token de recuperação/troca de senha e associa ele a um usuário
+	 * @param dto
+	 * @param token
+	 */
 	@Transactional
 	public void criarTokenRecuperacao(UsuarioDTO dto, String token) {
 		if (dto != null && token != null) {
@@ -109,6 +140,11 @@ public class TokenServico {
 		}
 	}
 
+	/**
+	 * Função que envia o token de recuperação de senha para o e-mail do usuário
+	 * @param email
+	 * @param appUrl
+	 */
 	@Transactional
 	public void enviarToken(String email, String appUrl) {
 		Map<String, Object> variaveis = new HashMap<>();
@@ -131,6 +167,11 @@ public class TokenServico {
 		}
 	}
 
+	/**
+	 * Deleta o token baseado no valor do token
+	 * @param token
+	 * @return
+	 */
 	@Transactional
 	public boolean deletarTokenVerificacao(String token) {
 		int rows = tokenVerificacaoRepositorio.excluirTokenVerificacaoBaseadoNoToken(token);
@@ -140,6 +181,11 @@ public class TokenServico {
 		return true;
 	}
 	
+	/**
+	 * Deleta o token baseado no ID de registro do token
+	 * @param id
+	 * @return
+	 */
 	@Transactional
 	public boolean deletarTokenVerificacao(Long id) {
 		int rows = tokenVerificacaoRepositorio.excluirTokenVerificacaoBaseadoNoUsuario(id);
@@ -149,6 +195,11 @@ public class TokenServico {
 		return true;
 	}
 
+	/**
+	 * Deleta o token baseado no valor do token
+	 * @param token
+	 * @return
+	 */
 	@Transactional
 	public boolean deletarTokenRecuperacao(String token) {
 		int rows = tokenRecuperacaoRepositorio.excluirTokenRecuperacaoBaseadoNoToken(token);
@@ -158,6 +209,11 @@ public class TokenServico {
 		return true;
 	}
 	
+	/**
+	 * Deleta o token baseado no ID de registro do token
+	 * @param id
+	 * @return
+	 */
 	@Transactional
 	public boolean deletarTokenRecuperacao(Long id) {
 		int rows = tokenRecuperacaoRepositorio.excluirTokenRecuperacaoBaseadoNoUsuario(id);

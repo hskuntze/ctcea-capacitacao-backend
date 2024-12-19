@@ -12,6 +12,10 @@ import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+/**
+ * Essa classe gerencia a Avaliação do Treinamento, e possui um relacionamento
+ * de 1-1 (UM PARA UM), ou seja, um Treinamento possui apenas uma Avaliação.
+ */
 @Entity
 @Table(name = "tb_avaliacao_treinamento")
 public class AvaliacaoTreinamento {

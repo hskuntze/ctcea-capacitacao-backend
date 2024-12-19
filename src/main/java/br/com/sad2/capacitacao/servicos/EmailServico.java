@@ -11,7 +11,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -56,8 +56,8 @@ public class EmailServico {
 			String content = templateEngine.process(template + ".html", context);
 			helper.setText(content, true);
 			
-			FileSystemResource logo = new FileSystemResource(new File("src/main/resources/static/images/logo_SGC_v_positiva.png"));
-			helper.addInline("logo", logo);
+			ClassPathResource logoResource = new ClassPathResource("static/images/logo_SGC_v_positiva.png");
+			helper.addInline("logo", logoResource);
 
 			mailSender.send(message);
 			return "Sucesso";

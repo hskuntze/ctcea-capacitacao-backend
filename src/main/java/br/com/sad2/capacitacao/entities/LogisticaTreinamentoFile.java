@@ -9,6 +9,16 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+/**
+ * Classe que gerencia os dados dos arquivos de Logística de Treinamento
+ * inseridos no cadastro do Treinamento.
+ * <p>
+ * A classe "LogisticaTreinamentoFile" depende da existência de um "Treinamento".
+ * <p>
+ * LogisticaTreinamentoFile's não podem ser cadastrados a não ser durante o registro
+ * de um Treinamento. Dessa forma, cria-se uma dependência entre essas classes.
+ * (Comportamento desejado)
+ */
 @Entity
 @Table(name = "tb_logistica_treinamento_file")
 public class LogisticaTreinamentoFile {

@@ -21,6 +21,11 @@ public class PostoControlador {
 	/**
 	 * --------- GETS ---------
 	 */
+	
+	/**
+	 * Endpoint que exibe todos os Postos/graduações cadastradas
+	 * @return
+	 */
 	@GetMapping
 	public ResponseEntity<List<PostoDTO>> buscarTodos() {
 		return ResponseEntity.ok().body(postoServico.buscarTodos());

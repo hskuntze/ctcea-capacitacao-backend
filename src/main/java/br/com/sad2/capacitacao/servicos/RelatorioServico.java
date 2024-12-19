@@ -16,11 +16,19 @@ public class RelatorioServico {
 	@Autowired
 	private TreinamentoRepositorio treinamentoRepositorio;
 	
+	/**
+	 * Exibe os treinamentos agrupados por STATUS
+	 * @return
+	 */
 	@Transactional(readOnly = true)
 	public List<TreinamentoStatusDTO> relatorioQuantidadeTreinamentoPorStatus() {
 		return treinamentoRepositorio.relatorioQuantidadeTreinamentoPorStatus();
 	}
 	
+	/**
+	 * Exibe os treinamentos agrupados por OM (sigla)
+	 * @return
+	 */
 	@Transactional(readOnly = true)
 	public List<TreinamentoOmDTO> relatorioQuantidadeTreinamentoPorOM() {
 		return treinamentoRepositorio.relatorioQuantidadeTreinamentoPorOM();

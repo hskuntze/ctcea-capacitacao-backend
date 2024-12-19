@@ -17,6 +17,14 @@ import javax.persistence.OneToOne;
 
 import br.com.sad2.capacitacao.entities.Usuario;
 
+/**
+ * Classe abstrata para a implementação dos tipos de token:<br>
+ * &nbsp;&nbsp;&nbsp;- Token de verificação<br>
+ * &nbsp;&nbsp;&nbsp;- Token de recuperação/troca de senha
+ * <p>
+ * Os token são associados a um usuário e tem 24 horas de duração 
+ * a partir do momento em que são criados.
+ */
 @MappedSuperclass
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class TokenAbstrato {

@@ -9,6 +9,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * Perfis dos "Usuarios" do sistema.
+ * <p>
+ * PERFIS DEFINIDOS:<br>
+ * - PERFIL_ADMIN: Todos os privilégios<br>
+ * - PERFIL_USUARIO: Todos os módulos, com exceção do módulo de controle de usuário (endpoints de usuario)
+ */
 @Entity
 @Table(name = "tb_perfil")
 public class Perfil implements Serializable {

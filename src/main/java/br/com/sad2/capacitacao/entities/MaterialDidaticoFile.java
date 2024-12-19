@@ -9,6 +9,16 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+/**
+ * Classe que gerencia os dados dos arquivos de Material Didatico do Treinamento
+ * inseridos durante o cadastro do Treinamento.
+ * <p>
+ * A classe "MaterialDidaticoFile" depende da existência de um "Treinamento".
+ * <p>
+ * MaterialDidaticoFile's não podem ser cadastrados a não ser durante o registro
+ * de um Treinamento. Dessa forma, cria-se uma dependência entre essas classes.
+ * (Comportamento desejado)
+ */
 @Entity
 @Table(name = "tb_material_didatico_file")
 public class MaterialDidaticoFile {

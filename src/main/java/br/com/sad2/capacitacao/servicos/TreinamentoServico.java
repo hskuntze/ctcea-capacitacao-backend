@@ -222,8 +222,7 @@ public class TreinamentoServico {
 	}
 
 	/**
-	 * Função para realizar o upload de arquivo de Material Didático para o banco de
-	 * dados
+	 * Função para realizar o upload de arquivo de Material Didático para o banco de dados
 	 * 
 	 * @param file
 	 * @param idTreinamento
@@ -258,8 +257,7 @@ public class TreinamentoServico {
 	}
 
 	/**
-	 * Função para realizar o upload de arquivo de Logística de Treinamento para o
-	 * banco de dados
+	 * Função para realizar o upload de arquivo de Logística de Treinamento para o banco de dados
 	 * 
 	 * @param file
 	 * @param idTreinamento

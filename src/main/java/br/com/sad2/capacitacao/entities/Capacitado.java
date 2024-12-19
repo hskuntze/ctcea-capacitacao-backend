@@ -16,6 +16,15 @@ import javax.persistence.Table;
 
 import br.com.sad2.capacitacao.entities.converters.ListStringConverter;
 
+/**
+ * Instruendo que concluiu um treinamento passa a ser um "Capacitado". 
+ * <p>
+ * Assim como o "Usuario", o "Capacitado" pode ser um militar ou um civil
+ * e existem informações que existem em um, mas não existem no outro:
+ * <p>
+ * "nomeGuerra", "brigadaMilitar" e "posto". Aqui a "instituicao" para o
+ * militar será a OM, preenchido de forma livre.
+ */
 @Entity
 @Table(name = "tb_capacitado")
 public class Capacitado {
