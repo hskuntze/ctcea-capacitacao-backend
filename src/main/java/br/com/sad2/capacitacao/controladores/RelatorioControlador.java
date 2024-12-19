@@ -19,11 +19,19 @@ public class RelatorioControlador {
 	@Autowired
 	private RelatorioServico relatorioServico;
 	
+	/**
+	 * Endpoint que chama a função relatorioQuantidadeTreinamentoPorStatus
+	 * @return
+	 */
 	@GetMapping(value = "/treinamentos/por-status")
 	public ResponseEntity<List<TreinamentoStatusDTO>> relatorioQuantidadeTreinamentoPorStatus() {
 		return ResponseEntity.ok().body(relatorioServico.relatorioQuantidadeTreinamentoPorStatus());
 	}
 	
+	/**
+	 * Endpoint que chama a função relatorioQuantidadeTreinamentoPorOM
+	 * @return
+	 */
 	@GetMapping(value = "/treinamentos/por-om")
 	public ResponseEntity<List<TreinamentoOmDTO>> relatorioQuantidadeTreinamentoPorOM() {
 		return ResponseEntity.ok().body(relatorioServico.relatorioQuantidadeTreinamentoPorOM());

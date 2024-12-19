@@ -28,11 +28,19 @@ public class OcorrenciaControlador {
 	/**
 	 * --------- GETS ---------
 	 */
+	
+	/**
+	 * Endpoint para buscar todos as ocorrências
+	 */
 	@GetMapping
 	public ResponseEntity<List<OcorrenciaDTO>> buscarTodos() {
 		return ResponseEntity.ok().body(ocorrenciaServico.buscarTodos());
 	}
 	
+	/**
+	 * Endpoint para buscar ocorrência por ID
+	 * @param id
+	 */
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<OcorrenciaDTO> buscarPorId(@PathVariable Long id) {
 		return ResponseEntity.ok().body(ocorrenciaServico.buscarPorId(id));
@@ -40,6 +48,11 @@ public class OcorrenciaControlador {
 	
 	/**
 	 * --------- POSTS ---------
+	 */
+	
+	/**
+	 * Endpoint para registrar uma ocorrência
+	 * @param dto
 	 */
 	@PostMapping(value = "/registrar")
 	public ResponseEntity<OcorrenciaDTO> registrar(@RequestBody OcorrenciaDTO dto) {
@@ -52,6 +65,12 @@ public class OcorrenciaControlador {
 	/**
 	 * --------- PUT ---------
 	 */
+	
+	/**
+	 * Endpoint para atualizar uma ocorrência baseada no ID
+	 * @param id
+	 * @param dto
+	 */
 	@PutMapping(value = "/atualizar/{id}")
 	public ResponseEntity<OcorrenciaDTO> atualizar(@PathVariable Long id, @RequestBody OcorrenciaDTO dto) {
 		OcorrenciaDTO element = ocorrenciaServico.atualizar(id, dto);
@@ -60,6 +79,11 @@ public class OcorrenciaControlador {
 	
 	/**
 	 * --------- DELETE ---------
+	 */
+	
+	/**
+	 * Endpoint para excluir uma ocorrência baseada no ID
+	 * @param id
 	 */
 	@DeleteMapping(value = "/deletar/{id}")
 	public ResponseEntity<Void> deletar(@PathVariable Long id) {

@@ -51,11 +51,25 @@ public class TreinamentoControlador {
 	/**
 	 * --------- GETS ---------
 	 */
+	
+	/**
+	 * Endpoint que busca todos os registros de Treinamento
+	 * @return
+	 */
 	@GetMapping
 	public ResponseEntity<List<TreinamentoDTO>> buscarTodos() {
 		return ResponseEntity.ok().body(treinamentoServico.buscarTodos());
 	}
 
+	/**
+	 * Endpoint que chama a função de filtragem de Treinamento
+	 * @param treinamento
+	 * @param sigla
+	 * @param bda
+	 * @param nomeCompleto
+	 * @param status
+	 * @return
+	 */
 	@GetMapping(value = "/filtrar")
 	public ResponseEntity<Set<TreinamentoCapacitadoFiltro>> buscarFiltro(
 			@RequestParam(defaultValue = "") String treinamento, @RequestParam(defaultValue = "") String sigla,
@@ -64,11 +78,21 @@ public class TreinamentoControlador {
 		return ResponseEntity.ok().body(treinamentoServico.filtrarTreinamentos(treinamento, sigla, bda, nomeCompleto, statusFilter));
 	}
 
+	/**
+	 * Endpoint que busca um Treinamento baseado no ID
+	 * @param id
+	 * @return
+	 */
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<TreinamentoDTO> buscarPorId(@PathVariable Long id) {
 		return ResponseEntity.ok().body(treinamentoServico.buscarPorId(id));
 	}
 
+	/**
+	 * Endpoint que realiza o DOWNLOAD do arquivo de MaterialDidaticoFile baseado no ID do arquiv
+	 * @param id
+	 * @return
+	 */
 	@GetMapping(value = "/download/materialDidatico/{id}")
 	public ResponseEntity<byte[]> downloadMaterialDidatico(@PathVariable Long id) {
 		MaterialDidaticoFileDTO dto = mdfServico.buscarPorId(id);
@@ -93,6 +117,11 @@ public class TreinamentoControlador {
 		return new ResponseEntity<>(fileContent, headers, HttpStatus.OK);
 	}
 
+	/**
+	 * Endpoint que realiza o DOWNLOAD do arquivo de LogisticaTreinamentoFile baseado no ID do arquivo
+	 * @param id
+	 * @return
+	 */
 	@GetMapping(value = "/download/logisticaTreinamento/{id}")
 	public ResponseEntity<byte[]> downloadLogisticaTreinamento(@PathVariable Long id) {
 		LogisticaTreinamentoFileDTO dto = ltfServico.buscarPorId(id);
@@ -120,6 +149,12 @@ public class TreinamentoControlador {
 	/**
 	 * --------- POSTS ---------
 	 */
+	
+	/**
+	 * Endpoint que realiza o registro do Treinamento
+	 * @param dto
+	 * @return
+	 */
 	@PostMapping(value = "/registrar")
 	public ResponseEntity<TreinamentoDTO> registrar(@RequestBody TreinamentoDTO dto) {
 		TreinamentoDTO treinamento = treinamentoServico.registrar(dto);
@@ -129,6 +164,12 @@ public class TreinamentoControlador {
 		return ResponseEntity.created(uri).body(treinamento);
 	}
 
+	/**
+	 * Endpoint para envio (UPLOAD) dos arquivos de MaterialDidaticoFile
+	 * @param file
+	 * @param treinamentoId
+	 * @return
+	 */
 	@PostMapping(value = "/upload/materialDidatico")
 	public ResponseEntity<String> uploadMaterialDidatico(@RequestParam("file") MultipartFile file,
 			@RequestParam("id") Long treinamentoId) {
@@ -136,6 +177,12 @@ public class TreinamentoControlador {
 		return ResponseEntity.ok().body("Sucesso");
 	}
 
+	/**
+	 * Endpoint para envio (UPLOAD) dos arquivos de LogisticaTreinamentoFile
+	 * @param file
+	 * @param treinamentoId
+	 * @return
+	 */
 	@PostMapping(value = "/upload/logisticaTreinamento")
 	public ResponseEntity<String> uploadLogisticaTreinamento(@RequestParam("file") MultipartFile file,
 			@RequestParam("id") Long treinamentoId) {
@@ -145,6 +192,12 @@ public class TreinamentoControlador {
 
 	/**
 	 * --------- PUTS ---------
+	 */
+	
+	/**
+	 * Endpoint que realiza a atualização do Treinamento
+	 * @param dto
+	 * @return
 	 */
 	@PutMapping(value = "/atualizar/{id}")
 	public ResponseEntity<TreinamentoDTO> atualizar(@PathVariable Long id, @RequestBody TreinamentoDTO dto) {
@@ -156,18 +209,34 @@ public class TreinamentoControlador {
 	/**
 	 * --------- DELETE ---------
 	 */
+	
+	/**
+	 * Endpoint que realiza a exclusão do Treinamento baseado no ID dele
+	 * @param id
+	 * @return
+	 */
 	@DeleteMapping(value = "/deletar/{id}")
 	public ResponseEntity<Void> deletar(@PathVariable Long id) {
 		treinamentoServico.deletar(id);
 		return ResponseEntity.noContent().build();
 	}
 
+	/**
+	 * Endpoint que realiza a exclusão do arquivo de MaterialDidaticoFile baseado no ID do arquivo
+	 * @param id
+	 * @return
+	 */
 	@DeleteMapping(value = "/deletar/materialDidatico/{id}")
 	public ResponseEntity<Void> deletarMaterialDidatico(@PathVariable Long id) {
 		treinamentoServico.deleteMaterialDidatico(id);
 		return ResponseEntity.noContent().build();
 	}
 
+	/**
+	 * Endpoint que realiza a exclusão do arquivo de LogisticaTreinamentoFile baseado no ID do arquivo
+	 * @param id
+	 * @return
+	 */
 	@DeleteMapping(value = "/deletar/logisticaTreinamento/{id}")
 	public ResponseEntity<Void> deletarLogisticaTreinamento(@PathVariable Long id) {
 		treinamentoServico.deleteLogisticaTreinamento(id);

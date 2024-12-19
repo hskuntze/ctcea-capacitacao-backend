@@ -10,6 +10,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+/**
+ * Classe que gerencia os dados das OM's cadastradas no sistema
+ */
 @Entity
 @Table(name = "tb_om")
 public class OM {
@@ -173,6 +176,10 @@ public class OM {
 
 	public void setCodregra(Integer codregra) {
 		this.codregra = codregra;
+	}
+
+	public List<Treinamento> getTreinamentos() {
+		return treinamentos;
 	}
 
 	@Override

@@ -51,7 +51,7 @@ public class UsuarioControlador {
 	@Autowired
 	private Environment env;
 
-	private static String FRONT_APP_URL = "";
+	private static String FRONT_APP_URL = "http://localhost:3056";
 	
 	/**
 	 * --------- GETS ---------
@@ -131,6 +131,11 @@ public class UsuarioControlador {
 				.location(URI.create(FRONT_APP_URL + "/sgc/confirmado")).build();
 	}
 	
+	/**
+	 * Endpoint que é chamado para redirecionar o usuário para o front-end
+	 * @param token
+	 * @return
+	 */
 	@GetMapping(value = "/redirecionarParaTrocarSenha")
 	public ResponseEntity<Void> redirecionarTrocaDeSenha(@RequestParam("token") String token) {
 		tokenServico.validarTokenRecuperacao(token);
@@ -160,12 +165,18 @@ public class UsuarioControlador {
 		UsuarioDTO usuario = usuarioServico.registrar(dto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(usuario.getId()).toUri();
 		
-		String appUrl = getAppUrl(request);
-		eventPublisher.publishEvent(new OnRegistrationCompleteEvent(usuario, request.getLocale(), appUrl));
+//		String appUrl = getAppUrl(request);
+//		eventPublisher.publishEvent(new OnRegistrationCompleteEvent(usuario, request.getLocale(), appUrl));
 		
 		return ResponseEntity.created(uri).body(usuario);
 	}
 	
+	/**
+	 * Endpoint que chama a função de envio de e-mail do token de recuperação/troca de senha
+	 * @param email
+	 * @param request
+	 * @return
+	 */
 	@PostMapping(value = "/recuperar")
 	public ResponseEntity<String> enviarEmailDeRecuperacao(@RequestParam("email") String email, HttpServletRequest request) {
 		String appUrl = getAppUrl(request);
@@ -174,18 +185,33 @@ public class UsuarioControlador {
 		return ResponseEntity.ok().body("Enviado");
 	}
 	
+	/**
+	 * Endpoint que invoca as funções para realizar a troca da senha do usuário
+	 * @param dto
+	 * @return
+	 */
 	@PostMapping(value = "/salvarTrocaDeSenha")
-	public ResponseEntity<Void> salvarTrocaDeSenha(@RequestBody TokenSenhaDTO dto) {
-		tokenServico.validarTokenRecuperacao(dto.getToken());
-		usuarioServico.trocarSenhaDoUsuarioComToken(dto);
-		
+	public ResponseEntity<Void> salvarTrocaDeSenha(@RequestParam String novaSenha, @RequestParam String senhaAntiga) {
+		usuarioServico.trocarSenhaDoUsuario(novaSenha, senhaAntiga);
 		return ResponseEntity.ok().build();
 	}
+//	public ResponseEntity<Void> salvarTrocaDeSenha(@RequestBody TokenSenhaDTO dto) {
+//		tokenServico.validarTokenRecuperacao(dto.getToken());
+//		usuarioServico.trocarSenhaDoUsuarioComToken(dto);
+//		
+//		return ResponseEntity.ok().build();
+//	}
 	
 	/**
 	 * --------- PUT ---------
 	 */
 	
+	/**
+	 * Endpoint que atualiza o usuário
+	 * @param id
+	 * @param dto
+	 * @return
+	 */
 	@PutMapping(value = "/atualizar/{id}")
 	public ResponseEntity<UsuarioDTO> atualizar(@PathVariable Long id, @RequestBody UsuarioDTO dto) {
 		UsuarioDTO atualizado = usuarioServico.atualizar(id, dto);
@@ -196,6 +222,11 @@ public class UsuarioControlador {
 	 * --------- DELETE ---------
 	 */
 	
+	/**
+	 * Endpoint que deleta o usuário (baseado no ID)
+	 * @param id
+	 * @return
+	 */
 	@DeleteMapping(value = "/deletar/{id}")
 	public ResponseEntity<Void> deletar(@PathVariable Long id) {
 		usuarioServico.deletar(id);

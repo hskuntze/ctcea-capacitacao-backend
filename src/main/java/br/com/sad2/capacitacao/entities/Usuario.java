@@ -22,6 +22,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+/**
+ * Usuário do sistema; técnico que usa o sistema; administrador.
+ * <p>
+ * Este usuário pode ser um militar ou um civil. Os dados básicos e comuns entre os tipos
+ * são todos com exceção de "nomeGuerra", "brigada", "om" e "posto". O militar não possui
+ * a informação "instituicao".
+ */
 @Entity
 @Table(name = "tb_usuario")
 public class Usuario implements Serializable, UserDetails {
@@ -38,8 +45,10 @@ public class Usuario implements Serializable, UserDetails {
 	private Integer tipo;
 	private String identidade;
 	private String telefone;
-	private String instituicao;
 	private String funcao;
+	
+	//Apenas para civis
+	private String instituicao;
 
 	//Apenas para militares
 	private String nomeGuerra;

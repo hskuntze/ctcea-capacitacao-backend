@@ -2,6 +2,10 @@ package br.com.sad2.capacitacao.dto.relatorios;
 
 import java.util.Objects;
 
+/**
+ * Classe que tem a finalidade de realizar a transferência dos dados necessários 
+ * para gerar os gráficos de relatório "Treinamentos por OM"
+ */
 public class TreinamentoOmDTO {
 
 	public String siglaOM;

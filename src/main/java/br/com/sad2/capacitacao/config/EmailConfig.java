@@ -13,7 +13,7 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 
 @Configuration
-@PropertySource(value = {"classpath:email-config.properties"})
+@PropertySource(value = {"classpath:email-config.properties"}) // Especifica o arquivo de propriedades de configuração para o email.
 public class EmailConfig {
 	private static final String ENCODING = "UTF-8";
 	
@@ -29,6 +29,10 @@ public class EmailConfig {
 	@Value("${email.password}")
 	private String emailPassword;
 	
+	/**
+     * Define um bean para a fonte de mensagens de email.
+     * Esse bean será usado para carregar mensagens localizadas em arquivos de recursos (e.g., `mailMessages.properties`).
+     */
 	@Bean
 	ResourceBundleMessageSource emailMessageSource() {
 		final ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
@@ -36,6 +40,10 @@ public class EmailConfig {
 		return messageSource;
 	}
 	
+	/**
+     * Define um bean para o resolvedor de templates Thymeleaf.
+     * Este resolvedor será usado para localizar e processar templates HTML para emails.
+     */
 	@Bean
 	ITemplateResolver thymeleafTemplateResolver() {
 		ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
@@ -46,6 +54,10 @@ public class EmailConfig {
 		return templateResolver;
 	}
 	
+	/**
+     * Define um bean para o envio de emails usando `JavaMailSender`.
+     * Configura os detalhes do servidor de email, como host, porta, credenciais e propriedades SMTP.
+     */
 	@Bean(name = "mailSender")
 	JavaMailSender getJavaMailSender() {
 		JavaMailSenderImpl jms = new JavaMailSenderImpl();

@@ -126,8 +126,10 @@ public class UsuarioServico implements UserDetailsService {
 				}
 				
 				dtoParaEntidade(usuario, dto);
-				usuario.setHabilitado(false);
-				usuario.setRegistroCompleto(false);
+				
+				//TEMPORARIAMENTE DESABILITADO ATÉ RESOLVER A QUESTÃO DO SMTP DO GMAIL
+				//usuario.setHabilitado(false);
+				//usuario.setRegistroCompleto(false);
 				usuario.setSenha(passwordEncoder.encode(dto.getPassword()));
 				usuario = usuarioRepositorio.save(usuario);
 				
@@ -263,6 +265,9 @@ public class UsuarioServico implements UserDetailsService {
 		usuario.setInstituicao(dto.getInstituicao());
 		usuario.setTipo(dto.getTipo());
 		usuario.setFuncao(dto.getFuncao());
+		
+		//TEMPORÁRIO ATÉ RESOLVER A QUESTÃO DO SMTP DO GMAIL
+		usuario.setHabilitado(dto.isHabilitado());
 		
 		usuario.getPerfis().clear();
 		dto.getPerfis().forEach(perfil -> {

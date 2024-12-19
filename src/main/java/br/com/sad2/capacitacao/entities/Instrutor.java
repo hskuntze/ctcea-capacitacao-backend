@@ -8,6 +8,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+/**
+ * A classe "Instrutor" depende da existência de um "Treinamento".
+ * <p>
+ * Instrutores não podem ser cadastrados a não ser durante o registro
+ * de um Treinamento. Dessa forma, cria-se uma dependência entre essas classes.
+ * (Comportamento desejado)
+ * <p>
+ * O Instrutor ao ser cadastrado terá as propriedades de avaliação nulas,
+ * que só serão preenchidas no momento de avaliação do treinamento.
+ */
 @Entity
 @Table(name = "tb_instrutor")
 public class Instrutor {

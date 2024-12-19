@@ -25,6 +25,15 @@ public class GlobalExceptionHandler {
 
 	private static String FRONT_APP_URL = "";
 
+	/**
+	 * Endpoint que captura e trata as exceções do tipo RecursoNaoEncontradoException. Quando uma exceção tem "Token" na mensagem
+	 * realiza um redirecionamento para a página "nao-encontrado" do front-end. Este tratamento é específico para os cliques realizados
+	 * nos e-mails já que não partem do front-end.
+	 * <p>
+	 * Caso não exista "Token" a função retorna um objeto JSON que contém as propriedades "error" e "message" para que o front-end possa
+	 * realizar os devidos tratamentos.
+	 * @return JSON
+	 */
 	@ExceptionHandler(RecursoNaoEncontradoException.class)
 	public ResponseEntity<Map<String, String>> handleRecursoNaoEncontradoException(RecursoNaoEncontradoException ex) {
 		if (Arrays.asList(env.getActiveProfiles()).contains("test")
@@ -44,6 +53,11 @@ public class GlobalExceptionHandler {
 	    }
 	}
 	
+	/**
+	 * Endpoint que captura e trata as exceções do tipo RecursoExistenteException, e que retorna um objeto JSON que contém as propriedades 
+	 * "error" e "message" para que o front-end possa realizar os devidos tratamentos.
+	 * @return JSON
+	 */
 	@ExceptionHandler(RecursoExistenteException.class)
 	public ResponseEntity<Map<String, String>> handleRecursoExistenteException(RecursoExistenteException ex) {
 		Map<String, String> response = new HashMap<>();

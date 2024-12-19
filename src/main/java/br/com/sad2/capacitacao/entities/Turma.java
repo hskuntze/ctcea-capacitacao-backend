@@ -8,6 +8,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+/**
+ * A classe "Turma" depende da existência de um "Treinamento".
+ * <p>
+ * Turmas não podem ser cadastradas a não ser durante o registro
+ * de um Treinamento. Dessa forma, cria-se uma dependência entre essas classes.
+ * (Comportamento desejado)
+ */
 @Entity
 @Table(name = "tb_turma")
 public class Turma {
